@@ -28,15 +28,12 @@ import androidx.annotation.RequiresApi;
 public class CreateWorkoutFragment extends DialogFragment {
 
 
-    private EditText exerciseNameText, repetitions, minutes, seconds;
-
-    public interface EditNameDialogListener {
-        void onFinishedWritingData(String exerciseName, String repetitions, String minutes, String seconds);
-
-    }
+    private EditText exerciseNameText, sets, repetitions, minutes, seconds;
 
 
-    public static String TAG = "CreateWorkoutFragmentDialog";
+
+    public static String TAG = "CreateWorkoutFragmentDialog";//used as a key for storing the workouts in local storage
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public CreateWorkoutFragment() {
@@ -83,27 +80,36 @@ public class CreateWorkoutFragment extends DialogFragment {
         builder.setCustomTitle(titleView);
 
         exerciseNameText = view.findViewById(R.id.exerciseNameEditTxt);
-        repetitions = view.findViewById(R.id.numberPicker);
+        sets = view.findViewById(R.id.numberPicker);
+        repetitions = view.findViewById(R.id.numberPicker2);
         minutes = view.findViewById(R.id.editTextMinutes);
         seconds = view.findViewById(R.id.editTextSeconds);
+
 
         builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (exerciseNameText.getText().toString().isEmpty()     ||
+                if (exerciseNameText.getText().toString().isEmpty()     ||//form validation
+                        sets.getText().toString().isEmpty()             ||
                         repetitions.getText().toString().isEmpty()      ||
                         minutes.getText().toString().isEmpty()          ||
                         seconds.getText().toString().isEmpty()) {
                     Toast.makeText(getContext(), "Some or all fields were left blank, no workout was created", Toast.LENGTH_LONG).show();
+
+
                 } else {
                     String name = exerciseNameText.getText().toString();
+                    int setNumber = Integer.parseInt(sets.getText().toString());
                     int reps = Integer.parseInt(repetitions.getText().toString());
                     int mins = Integer.parseInt(minutes.getText().toString());
                     int secs = Integer.parseInt(seconds.getText().toString());
 
-                    Utils.getInstantiation(getContext()).addWorkout(new Workout(name, reps, mins, secs));
+                    Utils.getInstantiation(getContext()).addWorkout(new Workout(name, setNumber, reps, mins, secs));
                     Toast.makeText(getContext(), "Created Workout", Toast.LENGTH_SHORT).show();
+                    View view = getActivity().findViewById(R.id.deleteAll);
+                    view.setVisibility(View.VISIBLE);
+
                 }
             }
         });

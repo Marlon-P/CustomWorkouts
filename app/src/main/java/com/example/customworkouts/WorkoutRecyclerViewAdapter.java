@@ -27,13 +27,15 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
     public void setWorkouts(ArrayList<Workout> workouts) {
 
         this.workouts = workouts;
-        System.out.println("is workouts null?" + this.workouts == null);
         notifyDataSetChanged();
+
+
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
         WindowManager windowManager = (WindowManager)parent.getContext().getSystemService(Context.WINDOW_SERVICE);
         assert windowManager != null;
         DisplayMetrics metrics = new DisplayMetrics();
@@ -43,7 +45,6 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.workout_layout, parent, false);
         view.setLayoutParams(new RecyclerView.LayoutParams(width, RecyclerView.LayoutParams.WRAP_CONTENT));
-        Log.d("Inflating: ", "VIEW IS BEING INFLATED");
 
         return new ViewHolder(view);
     }
@@ -51,9 +52,18 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        holder.exerciseName.setText(workouts.get(position).getExerciseName());
-        holder.repetitions.setText(""+ workouts.get(position).getRepetitions());
-        holder.timer.setText("10:22");
+        Workout w = workouts.get(position);
+
+        String exerciseName = w.getExerciseName();
+
+        String setsAndReps = w.getSets() + "x"+ w.getRepetitions();
+        int minutes = w.getMinutes();
+        int seconds= w.getSeconds();
+        String time = minutes + ":" + seconds;
+
+        holder.exerciseName.setText(exerciseName);
+        holder.setsXrepetitions.setText(setsAndReps);
+        holder.timer.setText(time);
 
     }
 
@@ -65,16 +75,16 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
     public class ViewHolder extends RecyclerView.ViewHolder {
 
 
-        private ImageView hamburgerIcon;
-        private TextView exerciseName, repetitions, timer;
+
+        private TextView exerciseName, setsXrepetitions, timer;
 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            hamburgerIcon = itemView.findViewById(R.id.hamburger);
+
             exerciseName = itemView.findViewById(R.id.exercise_name);
-            repetitions = itemView.findViewById(R.id.repetitions);
+            setsXrepetitions = itemView.findViewById(R.id.repetitions);
             timer = itemView.findViewById(R.id.timer);
 
 

@@ -60,6 +60,7 @@
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
         android:text="DELETE ALL"
+        android:visibility="gone"
         android:textColor="#EE0000"
         android:textSize="20sp"
         android:onClick="deleteAll"/>

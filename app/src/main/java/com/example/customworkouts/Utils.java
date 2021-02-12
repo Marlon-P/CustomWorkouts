@@ -2,12 +2,14 @@ package com.example.customworkouts;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Utils {
 
@@ -15,11 +17,12 @@ public class Utils {
     private static Utils instance;
     private SharedPreferences sharedPreferences;
     private static WorkoutRecyclerViewAdapter adapter;
-    private static ArrayList<Workout> workoutArrayList;
+
 
     public Utils(Context context) {
 
         sharedPreferences = context.getSharedPreferences("WorkoutDb", Context.MODE_PRIVATE);
+
 
         if (null == getWorkouts()) {
 
@@ -53,13 +56,32 @@ public class Utils {
         return instance;
     }
 
+    public void swap(int from_pos, int target_pos) {
+        ArrayList<Workout> workouts = getWorkouts();
+        for (Workout d: workouts) {
+            System.out.println(d.getExerciseName());
+        }
+        Collections.swap(workouts, from_pos, target_pos);
+
+        System.out.println("hhh");
+        for (Workout d: workouts) {
+            System.out.println(d.getExerciseName());
+        }
+        Gson gson = new Gson();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(WORKOUTS_KEY);
+        editor.putString(WORKOUTS_KEY, gson.toJson(workouts));
+        editor.apply();
+        adapter.notifyItemMoved(from_pos, target_pos);
+    }
+
     private void initData() {
         ArrayList<Workout> workouts = new ArrayList<Workout>();
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();
         editor.putString(WORKOUTS_KEY, gson.toJson(workouts));
-        editor.commit(); //commit occurs immediately, apply() works in the background
+        editor.apply(); //commit occurs immediately, apply() works in the background
 
     }
 
@@ -85,7 +107,7 @@ public class Utils {
 
     public boolean removeWorkout(Workout workout) {
         ArrayList<Workout> workouts = getWorkouts();
-        System.out.println("SIZE OF WORKOUTS IS " + workouts.size());
+
         for (Workout w : workouts) {
             if (w.equals(workout)) {
                 if (workouts.remove(w)) {
@@ -103,15 +125,23 @@ public class Utils {
         return false;
     }
 
-    public void deleteAll() {
+    public boolean deleteAll() {
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
-        editor.commit();
-        adapter.setWorkouts(new ArrayList<>());
+        editor.apply();
+        ArrayList<Workout> workouts = new ArrayList<>();//after clearing all itmes in the list, create a new empty arraylist to add to
+        adapter.setWorkouts(workouts);
+
+        Gson gson = new Gson();
+
+        editor.putString(WORKOUTS_KEY, gson.toJson(workouts));
+
+        return true;
     }
 
     public ArrayList<Workout> getWorkouts() {
+
 
         Gson gson = new Gson();
         Type type = new TypeToken<ArrayList<Workout>>(){}.getType();

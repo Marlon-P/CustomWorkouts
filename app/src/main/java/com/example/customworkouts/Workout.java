@@ -5,10 +5,12 @@ import java.util.Objects;
 public class Workout {
 
     private String exerciseName;
-    private int repetitions, minutes, seconds;
+    private int sets, repetitions, minutes, seconds;
 
-    public Workout(String exerciseName, int repetitions, int minutes, int seconds) {
+    public Workout(String exerciseName, int sets, int repetitions, int minutes, int seconds) {
+
         this.exerciseName = exerciseName;
+        this.sets = sets;
         this.repetitions = repetitions;
         this.minutes = minutes;
         this.seconds = seconds;
@@ -61,5 +63,13 @@ public class Workout {
     @Override
     public int hashCode() {
         return Objects.hash(getExerciseName(), getRepetitions(), getMinutes(), getSeconds());
+    }
+
+    public int getSets() {
+        return sets;
+    }
+
+    public void setSets(int sets) {
+        this.sets = sets;
     }
 }
