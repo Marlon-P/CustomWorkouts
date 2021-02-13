@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Canvas;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -49,7 +51,10 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
+        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            private ColorDrawable background = new ColorDrawable(getResources().getColor(R.color.purple_500));
+
+            //swap two workouts with each other
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder dragged, @NonNull RecyclerView.ViewHolder target) {
 
@@ -62,7 +67,31 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                if (direction == ItemTouchHelper.LEFT) {
+                    adapter.showMenu(viewHolder.getAdapterPosition());
+                    background = new ColorDrawable(getResources().getColor(R.color.gray));//since bg is already purple change it to gray after swiping left
+                } else {
+                    adapter.closeMenu(viewHolder.getAdapterPosition());
+                    background = new ColorDrawable(getResources().getColor(R.color.purple_500));
+                }
+            }
 
+            //just drawing the purple or gray background when swiping left or right on the recycler view
+            @Override
+            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+
+                View itemView = viewHolder.itemView;
+
+                if (dX > 0) {
+                    background.setBounds(itemView.getLeft(), itemView.getTop(), itemView.getLeft() + ((int) dX), itemView.getBottom());
+                } else if (dX < 0) {
+                    background.setBounds(itemView.getRight() + ((int) dX), itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                } else {
+                    background.setBounds(0, 0, 0, 0);
+                }
+
+                background.draw(c);
             }
         });
 
@@ -87,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
     public void addWorkout(View view) {
 
 
-
+        //prompt dialog to show up to create workout
         CreateWorkoutFragment createWorkoutFragment = new CreateWorkoutFragment();
         createWorkoutFragment.show(getFragmentManager(), CreateWorkoutFragment.TAG);
 

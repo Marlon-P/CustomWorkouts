@@ -85,44 +85,56 @@ public class Utils {
 
     }
 
-    public boolean addWorkout(Workout workout) {
+    public void addWorkout(Workout workout) {
         ArrayList<Workout> workouts = getWorkouts();
 
 
         if (workouts.add(workout)) {
 
-            Gson gson = new Gson();
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.remove(WORKOUTS_KEY);
-            editor.putString(WORKOUTS_KEY, gson.toJson(workouts));
-            adapter.setWorkouts(workouts);
+            updateWorkoutsList(workouts);
 
-            editor.apply();
-            return true;
 
         }
 
-        return false;
+
     }
 
-    public boolean removeWorkout(Workout workout) {
+    public void editWorkout(int pos, String name, int sets, int reps, int minutes, int seconds) {
+        ArrayList<Workout> workouts = getWorkouts();
+
+        Workout w = workouts.get(pos);
+        w.setExerciseName(name);
+        w.setSets(sets);
+        w.setRepetitions(reps);
+        w.setMinutes(minutes);
+        w.setSeconds(seconds);
+
+        updateWorkoutsList(workouts);
+
+    }
+
+    public void removeWorkout(Workout workout) {
         ArrayList<Workout> workouts = getWorkouts();
 
         for (Workout w : workouts) {
             if (w.equals(workout)) {
                 if (workouts.remove(w)) {
-                    Gson gson = new Gson();
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.remove(WORKOUTS_KEY);
-                    editor.putString(WORKOUTS_KEY, gson.toJson(workouts));
+                    updateWorkoutsList(workouts);
 
-                    editor.apply();
-                    return true;
                 }
             }
         }
 
-        return false;
+
+    }
+
+    public void updateWorkoutsList(ArrayList<Workout> workouts) {
+        Gson gson = new Gson();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(WORKOUTS_KEY);
+        editor.putString(WORKOUTS_KEY, gson.toJson(workouts));
+
+        editor.apply();
     }
 
     public boolean deleteAll() {

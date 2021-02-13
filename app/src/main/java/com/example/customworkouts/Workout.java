@@ -6,6 +6,7 @@ public class Workout {
 
     private String exerciseName;
     private int sets, repetitions, minutes, seconds;
+    private boolean showEditDelMenu = false;
 
     public Workout(String exerciseName, int sets, int repetitions, int minutes, int seconds) {
 
@@ -71,5 +72,13 @@ public class Workout {
 
     public void setSets(int sets) {
         this.sets = sets;
+    }
+
+    public boolean isShowEditDelMenu() {
+        return showEditDelMenu;
+    }
+
+    public void setShowEditDelMenu(boolean showEditDelMenu) {
+        this.showEditDelMenu = showEditDelMenu;
     }
 }

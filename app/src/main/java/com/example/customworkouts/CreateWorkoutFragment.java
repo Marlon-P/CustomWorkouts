@@ -76,6 +76,7 @@ public class CreateWorkoutFragment extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.create_workout, null);
         View titleView = inflater.inflate(R.layout.dialog_title, null);
+
         builder.setView(view);
         builder.setCustomTitle(titleView);
 
