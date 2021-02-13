@@ -1,7 +1,9 @@
 package com.example.customworkouts;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Point;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Chronometer;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,14 +65,73 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
                 holder.editButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(v.getContext(), "NAVIGATE TO EDIT THE WORKOUT", Toast.LENGTH_SHORT).show();
+                        EditText exerciseNameText, sets, repetitions, minutes, seconds;
+                        AlertDialog.Builder builder = new AlertDialog.Builder(holder.itemView.getContext(), AlertDialog.THEME_DEVICE_DEFAULT_DARK);
 
+
+                        LayoutInflater inflater = (LayoutInflater) holder.itemView.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                        View view = inflater.inflate(R.layout.create_workout, null);
+                        View titleView = inflater.inflate(R.layout.edit_dialog_title, null);
+
+                        builder.setView(view);
+                        builder.setCustomTitle(titleView);
+
+                        exerciseNameText = view.findViewById(R.id.exerciseNameEditTxt);
+                        sets = view.findViewById(R.id.numberPicker);
+                        repetitions = view.findViewById(R.id.numberPicker2);
+                        minutes = view.findViewById(R.id.editTextMinutes);
+                        seconds = view.findViewById(R.id.editTextSeconds);
+
+                        exerciseNameText.setText(w.getExerciseName());
+                        sets.setText("" + w.getSets());
+                        repetitions.setText("" + w.getRepetitions());
+                        minutes.setText("" + w.getMinutes());
+                        seconds.setText("" + w.getSeconds());
+
+                        builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String name = exerciseNameText.getText().toString();
+                                int setNumber = Integer.parseInt(sets.getText().toString());
+                                int reps = Integer.parseInt(repetitions.getText().toString());
+                                int mins = Integer.parseInt(minutes.getText().toString());
+                                int secs = Integer.parseInt(seconds.getText().toString());
+
+                                Utils.getInstantiation(holder.itemView.getContext()).editWorkout(position, name, setNumber, reps, mins, secs);
+                            }
+                        });
+                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+
+                        builder.create();
+                        builder.show();
                     }
                 });
                 holder.deleteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(v.getContext(), "NAVIGATE TO Delete THE WORKOUT", Toast.LENGTH_SHORT).show();
+                        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(holder.itemView.getContext(), AlertDialog.THEME_DEVICE_DEFAULT_DARK);
+                        builder.setMessage("Are you sure you want to delete this workout?");
+                        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Utils.getInstantiation(holder.itemView.getContext()).removeWorkout(w);
+
+                            }
+                        });
+                        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                        builder.create();
+                        builder.show();
                     }
                 });
             } else {

@@ -134,6 +134,7 @@ public class Utils {
         editor.remove(WORKOUTS_KEY);
         editor.putString(WORKOUTS_KEY, gson.toJson(workouts));
 
+        adapter.setWorkouts(workouts);
         editor.apply();
     }
 
