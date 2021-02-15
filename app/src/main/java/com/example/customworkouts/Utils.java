@@ -102,6 +102,8 @@ public class Utils {
     public void editWorkout(int pos, String name, int sets, int reps, int minutes, int seconds) {
         ArrayList<Workout> workouts = getWorkouts();
 
+
+
         Workout w = workouts.get(pos);
         w.setExerciseName(name);
         w.setSets(sets);
@@ -115,15 +117,18 @@ public class Utils {
 
     public void removeWorkout(Workout workout) {
         ArrayList<Workout> workouts = getWorkouts();
+        Workout removeWorkout = new Workout("", 0,0,0,0);
 
         for (Workout w : workouts) {
             if (w.equals(workout)) {
-                if (workouts.remove(w)) {
-                    updateWorkoutsList(workouts);
-
-                }
+                removeWorkout = w;
             }
         }
+        if (!removeWorkout.equals(new Workout("", 0,0,0,0)) ) {
+            workouts.remove(removeWorkout);
+            updateWorkoutsList(workouts);
+        }
+
 
 
     }

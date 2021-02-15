@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Point;
+import android.opengl.Visibility;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -15,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,8 +29,7 @@ import java.util.ArrayList;
 public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecyclerViewAdapter.ViewHolder>  {
 
     private ArrayList<Workout> workouts;
-    private final int SHOW_MENU = 1;
-    private final int HIDE_MENU = 2;
+
 
     public void setWorkouts(ArrayList<Workout> workouts) {
 
@@ -41,18 +42,10 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view;
-
-        if (viewType == SHOW_MENU) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.edit_delete_workout, parent, false);
-            return new ViewHolder(view, true);
-        } else {
+            View view;
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.workout_layout, parent, false);
-            return new ViewHolder(view, false);
-        }
 
-
-
+            return new ViewHolder(view);
     }
 
     @Override
@@ -61,7 +54,36 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
 
             Workout w = workouts.get(position);
 
-            if (w.isShowEditDelMenu()) {
+            String exerciseName = w.getExerciseName();
+
+            String setsAndReps = w.getSets() + "x"+ w.getRepetitions();
+            int minutes = w.getMinutes();
+            int seconds= w.getSeconds();
+            String s = "";
+            if (seconds < 10) {
+                s = "0";
+            }
+            String time = minutes + ":" + s + seconds;
+
+            holder.exerciseName.setText(exerciseName);
+            holder.setsXrepetitions.setText(setsAndReps);
+            holder.timer.setText(time);
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int visibility = holder.edit_delete_option_menu.getVisibility();
+
+                    if (visibility == View.VISIBLE) {
+                        holder.edit_delete_option_menu.setVisibility(View.GONE);
+                    } else {
+                        holder.edit_delete_option_menu.setVisibility(View.VISIBLE);
+                    }
+
+
+                }
+            });
+
                 holder.editButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -87,7 +109,15 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
                         sets.setText("" + w.getSets());
                         repetitions.setText("" + w.getRepetitions());
                         minutes.setText("" + w.getMinutes());
-                        seconds.setText("" + w.getSeconds());
+
+                        int s = w.getSeconds();
+                        if (s < 10) {
+                            String secone = "0" + s;
+                            seconds.setText(secone);
+                        } else {
+                            String secone = "" + s;
+                            seconds.setText(secone);
+                        }
 
                         builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
                             @Override
@@ -134,18 +164,7 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
                         builder.show();
                     }
                 });
-            } else {
-                String exerciseName = w.getExerciseName();
 
-                String setsAndReps = w.getSets() + "x"+ w.getRepetitions();
-                int minutes = w.getMinutes();
-                int seconds= w.getSeconds();
-                String time = minutes + ":" + seconds;
-
-                holder.exerciseName.setText(exerciseName);
-                holder.setsXrepetitions.setText(setsAndReps);
-                holder.timer.setText(time);
-            }
 
 
     }
@@ -155,24 +174,8 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
         return workouts.size();
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        if (workouts.get(position).isShowEditDelMenu()) {
-            return SHOW_MENU;
-        }
 
-        return HIDE_MENU;
-    }
 
-    public void showMenu(int pos) {
-        workouts.get(pos).setShowEditDelMenu(true);
-        notifyDataSetChanged();
-    }
-
-    public void closeMenu(int pos) {
-        workouts.get(pos).setShowEditDelMenu(false);
-        notifyDataSetChanged();
-    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -180,25 +183,33 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
 
         private TextView exerciseName, setsXrepetitions, timer;
         private ImageView editButton, deleteButton;
+        private LinearLayout edit_delete_option_menu;
 
 
-        public ViewHolder(@NonNull View itemView, boolean showMenu) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            editButton = itemView.findViewById(R.id.editButton);
+            deleteButton = itemView.findViewById(R.id.deleteButton);
 
-            if (showMenu) {
 
-                editButton = itemView.findViewById(R.id.editButton);
-                deleteButton = itemView.findViewById(R.id.deleteButton);
+            exerciseName = itemView.findViewById(R.id.exercise_name);
+            setsXrepetitions = itemView.findViewById(R.id.repetitions);
+            timer = itemView.findViewById(R.id.timer);
 
-            } else {
-                exerciseName = itemView.findViewById(R.id.exercise_name);
-                setsXrepetitions = itemView.findViewById(R.id.repetitions);
-                timer = itemView.findViewById(R.id.timer);
-            }
+            edit_delete_option_menu = itemView.findViewById(R.id.edit_delete_options);
+
+
+
 
 
         }
+    }
+
+    public class Header {
+
+        private String groupName;
+
     }
 
 

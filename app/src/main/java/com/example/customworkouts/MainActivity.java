@@ -21,22 +21,33 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private WorkoutRecyclerViewAdapter adapter;
-    private EditText exerciseName, repetitions, minutes, seconds;
-    private TextView deleteAll;
     private Utils utils;
-
+    private FloatingActionButton menuOpenFAB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        deleteAll = findViewById(R.id.deleteAll);
+
+
+        menuOpenFAB = findViewById(R.id.open_menu_FAB);
+
+
+        menuOpenFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
         utils = new Utils(this);
 
 
@@ -51,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
             private ColorDrawable background = new ColorDrawable(getResources().getColor(R.color.purple_500));
 
             //swap two workouts with each other
@@ -67,32 +78,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                if (direction == ItemTouchHelper.LEFT) {
-                    adapter.showMenu(viewHolder.getAdapterPosition());
-                    background = new ColorDrawable(getResources().getColor(R.color.gray));//since bg is already purple change it to gray after swiping left
-                } else {
-                    adapter.closeMenu(viewHolder.getAdapterPosition());
-                    background = new ColorDrawable(getResources().getColor(R.color.purple_500));
-                }
+
             }
 
-            //just drawing the purple or gray background when swiping left or right on the recycler view
-            @Override
-            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
 
-                View itemView = viewHolder.itemView;
-
-                if (dX > 0) {
-                    background.setBounds(itemView.getLeft(), itemView.getTop(), itemView.getLeft() + ((int) dX), itemView.getBottom());
-                } else if (dX < 0) {
-                    background.setBounds(itemView.getRight() + ((int) dX), itemView.getTop(), itemView.getRight(), itemView.getBottom());
-                } else {
-                    background.setBounds(0, 0, 0, 0);
-                }
-
-                background.draw(c);
-            }
         });
 
         helper.attachToRecyclerView(recyclerView);
@@ -103,11 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<Workout> workouts = utils.getInstance(this, adapter).getWorkouts();
         adapter.setWorkouts(workouts);
-        if (workouts.size() > 0) {
-            deleteAll.setVisibility(View.VISIBLE);
-        } else {
-            deleteAll.setVisibility(View.GONE);
-        }
+
 
     }
 
@@ -133,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (Utils.getInstantiation(view.getContext()).deleteAll()) {
-                    deleteAll.setVisibility(View.GONE);
+                    Toast.makeText(view.getContext(), "Deleted All Workouts", Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -148,4 +133,7 @@ public class MainActivity extends AppCompatActivity {
         builder.create();
         builder.show();
     }
+
+
+
 }

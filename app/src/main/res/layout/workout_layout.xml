@@ -5,19 +5,20 @@
     android:id="@+id/parent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/gray"
+    android:background="@color/darker_gray"
     android:orientation="vertical"
     android:layout_gravity="center"
 
-    android:elevation="10dp"
+    android:elevation="4dp"
+
     >
 
     <LinearLayout
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp">
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp">
 
         <ImageView
             android:id="@+id/hamburger"
@@ -25,6 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
             android:src="@drawable/ic_hamburger">
 
 
@@ -40,12 +42,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:ellipsize="end"
-                android:maxLines="1"
                 android:scrollHorizontally="true"
                 android:text="@string/exercise_name"
                 android:textColor="@color/white"
                 android:textSize="28sp"
-                android:layout_gravity="center_vertical">
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                >
 
             </TextView>
 
@@ -70,12 +73,64 @@
                 android:textSize="28sp"
                 android:text="03:45"
                 android:textColor="@color/white"
-                android:layout_gravity="center_vertical"
-                android:gravity="right">
+                android:layout_gravity="center"
+                android:gravity="center">
             </TextView>
         </LinearLayout>
 
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/edit_delete_options"
+        android:background="@color/purple_500"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        >
+
+        <RelativeLayout
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/editButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_edit">
+
+            </ImageView>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/deleteButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_delete"
+                android:layout_centerHorizontal="true"
+                >
+
+            </ImageView>
+
+
+        </RelativeLayout>
     </LinearLayout>
 
 

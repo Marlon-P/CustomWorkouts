@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     tools:context=".MainActivity"
     android:background="@color/gray"
-    android:orientation="vertical">
+    >
 
 
     <com.google.android.material.appbar.MaterialToolbar
@@ -27,43 +27,55 @@
 
     </com.google.android.material.appbar.MaterialToolbar>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:elevation="5dp"
-        android:contentDescription="@string/add_icon"
-        android:src="@drawable/ic_add"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        android:backgroundTint="@color/purple_500"
-        android:onClick="addWorkout">
 
-    </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/workoutsRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:layout_editor_absoluteY="56dp"
-        android:layout_below="@id/topAppBar"/>
+        android:layout_height="match_parent"
+        android:layout_below="@id/topAppBar"
 
-    <TextView
-        android:id="@+id/deleteAll"
+        tools:layout_editor_absoluteY="56dp" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_margin="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        android:text="DELETE ALL"
-        android:visibility="gone"
-        android:textColor="#EE0000"
-        android:textSize="20sp"
-        android:onClick="deleteAll"/>
+        android:orientation="vertical"
+
+        >
+
+
+        <!-- margin bottom not working in RelLayout so wrapped in LinearLayout -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/open_menu_FAB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:backgroundTint="@color/teal_200"
+            android:contentDescription="@string/add_icon"
+            android:elevation="5dp"
+            android:src="@drawable/ic_add"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+        </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
+
+
+
+
+
+
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
 </RelativeLayout>

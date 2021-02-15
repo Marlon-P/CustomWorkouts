@@ -4,6 +4,7 @@ import java.util.Objects;
 
 public class Workout {
 
+    public String groupName;
     private String exerciseName;
     private int sets, repetitions, minutes, seconds;
     private boolean showEditDelMenu = false;
@@ -15,6 +16,17 @@ public class Workout {
         this.repetitions = repetitions;
         this.minutes = minutes;
         this.seconds = seconds;
+        groupName = "asdfasdfasdfasdfl;kj;lkj;lkj;lkj";
+    }
+
+    public Workout(String exerciseName, int sets, int repetitions, int minutes, int seconds, String groupName) {
+
+        this.exerciseName = exerciseName;
+        this.sets = sets;
+        this.repetitions = repetitions;
+        this.minutes = minutes;
+        this.seconds = seconds;
+        this.groupName = groupName;
     }
 
 
