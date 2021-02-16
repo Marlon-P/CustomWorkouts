@@ -11,13 +11,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,10 +44,29 @@ public class MainActivity extends AppCompatActivity {
         menuOpenFAB = findViewById(R.id.open_menu_FAB);
 
 
+
         menuOpenFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                PopupMenu popupMenu = new PopupMenu(MainActivity.this, v);
+                popupMenu.getMenuInflater().inflate(R.menu.popup_menu,popupMenu.getMenu());
 
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.M)
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (item.getTitle().equals("Delete All")) {
+                            deleteAll(v);
+                        } else if (item.getTitle().equals("Add a Workout")) {
+                            addWorkout(v);
+                        } else {
+                            System.out.println("Adding MULTIPLE WORKOUTS");
+                            addMultiWorkouts(v);
+                        }
+                        return true;
+                    }
+                });
+                popupMenu.show();
             }
         });
 
@@ -103,11 +125,27 @@ public class MainActivity extends AppCompatActivity {
 
         //prompt dialog to show up to create workout
         CreateWorkoutFragment createWorkoutFragment = new CreateWorkoutFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("multiAdd", false);
+        createWorkoutFragment.setArguments(bundle);
         createWorkoutFragment.show(getFragmentManager(), CreateWorkoutFragment.TAG);
 
 
 
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void addMultiWorkouts(View v) {
+        CreateWorkoutFragment createWorkoutFragment = new CreateWorkoutFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("multiAdd", true);
+        createWorkoutFragment.setArguments(bundle);
+
+        createWorkoutFragment.show(getFragmentManager(), CreateWorkoutFragment.TAG);
+
+
+    }
+
 
 
     public void deleteAll(View view) {

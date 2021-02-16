@@ -99,6 +99,17 @@ public class Utils {
 
     }
 
+    public void addWorkouts(ArrayList<Workout> w) {
+        ArrayList<Workout> workouts = getWorkouts();
+        if (workouts.addAll(w)) {
+
+            updateWorkoutsList(workouts);
+
+
+        }
+
+    }
+
     public void editWorkout(int pos, String name, int sets, int reps, int minutes, int seconds) {
         ArrayList<Workout> workouts = getWorkouts();
 

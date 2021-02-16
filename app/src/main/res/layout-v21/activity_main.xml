@@ -28,16 +28,14 @@
     </com.google.android.material.appbar.MaterialToolbar>
 
 
-
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/workoutsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/topAppBar"
 
+        android:layout_marginTop="0dp"
         tools:layout_editor_absoluteY="56dp" />
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
@@ -55,9 +53,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:backgroundTint="@color/teal_200"
             android:contentDescription="@string/add_icon"
+            android:backgroundTint="@color/teal_200"
             android:elevation="5dp"
+            app:fabSize="mini"
             android:src="@drawable/ic_add"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent">

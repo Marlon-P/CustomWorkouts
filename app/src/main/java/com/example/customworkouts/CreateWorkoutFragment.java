@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.NumberPicker;
@@ -23,6 +24,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
+
+import java.util.ArrayList;
 
 
 public class CreateWorkoutFragment extends DialogFragment {
@@ -31,7 +35,7 @@ public class CreateWorkoutFragment extends DialogFragment {
     private EditText exerciseNameText, sets, repetitions, minutes, seconds;
 
 
-
+    private boolean multiAdd = false;
     public static String TAG = "CreateWorkoutFragmentDialog";//used as a key for storing the workouts in local storage
 
 
@@ -52,8 +56,6 @@ public class CreateWorkoutFragment extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //timer = view.findViewById(R.id.countDownTimer);
-
 
     }
 
@@ -69,7 +71,11 @@ public class CreateWorkoutFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
+        Bundle bundle = getArguments();
+        multiAdd = bundle.getBoolean("multiAdd");
+        System.out.println("MULTIADD IS " + multiAdd);
 
+        AlertDialog dialog;
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_DEVICE_DEFAULT_DARK);
 
 
@@ -87,33 +93,126 @@ public class CreateWorkoutFragment extends DialogFragment {
         seconds = view.findViewById(R.id.editTextSeconds);
 
 
-        builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (exerciseNameText.getText().toString().isEmpty()     ||//form validation
-                        sets.getText().toString().isEmpty()             ||
-                        repetitions.getText().toString().isEmpty()      ||
-                        minutes.getText().toString().isEmpty()          ||
-                        seconds.getText().toString().isEmpty()) {
-                    Toast.makeText(getContext(), "Some or all fields were left blank, no workout was created", Toast.LENGTH_LONG).show();
 
+        if (multiAdd) {
 
-                } else {
-                    String name = exerciseNameText.getText().toString();
-                    int setNumber = Integer.parseInt(sets.getText().toString());
-                    int reps = Integer.parseInt(repetitions.getText().toString());
-                    int mins = Integer.parseInt(minutes.getText().toString());
-                    int secs = Integer.parseInt(seconds.getText().toString());
+            ArrayList<Workout> workouts = new ArrayList<>();
 
-                    Utils.getInstantiation(getContext()).addWorkout(new Workout(name, setNumber, reps, mins, secs));
-                    Toast.makeText(getContext(), "Created Workout", Toast.LENGTH_SHORT).show();
-                    View view = getActivity().findViewById(R.id.deleteAll);
-                    view.setVisibility(View.VISIBLE);
-
+            builder.setPositiveButton("Finish", new DialogInterface.OnClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.M)
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (workouts.isEmpty()) {
+                        Toast.makeText(getContext(), "No Workouts Added", Toast.LENGTH_LONG).show();
+                    } else {
+                        Utils.getInstantiation(getContext()).addWorkouts(workouts);
+                        if (workouts.size() > 1) {
+                            Toast.makeText(view.getContext(), "Added " + workouts.size() + " workouts to your list", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(view.getContext(), "Added a new Workout", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
-            }
-        });
+            });
+
+            builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    workouts.clear();
+                }
+            });
+
+
+            builder.setNegativeButton("Add Workout", null);
+
+            dialog = builder.create();
+
+            //do this so the add workout button doesn't dismiss the dialog
+            dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialogInterface) {
+                    Button addWorkoutButton = dialog.getButton(Dialog.BUTTON_NEGATIVE);
+                    addWorkoutButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String name = exerciseNameText.getText().toString();
+                            String setNumberEditText = sets.getText().toString();
+                            String repsEditText = repetitions.getText().toString();
+                            String minsEditText = minutes.getText().toString();
+                            String secondsEditText = seconds.getText().toString();
+
+                            if (    name.isEmpty()                          ||//form validation
+                                    setNumberEditText.isEmpty()             ||
+                                    repsEditText.isEmpty()                  ||
+                                    minsEditText.isEmpty()                  ||
+                                    secondsEditText.isEmpty()) {
+
+                                Toast.makeText(view.getContext(), "Some or all fields were left blank, no workout was created", Toast.LENGTH_LONG).show();
+
+
+                            } else {
+                                int setNumber = Integer.parseInt(setNumberEditText);
+                                int reps = Integer.parseInt(repsEditText);
+                                int mins = Integer.parseInt(minsEditText);
+                                int secs = Integer.parseInt(secondsEditText);
+
+                                workouts.add(new Workout(name, setNumber, reps, mins, secs));
+                                Toast.makeText(view.getContext(), "Added " + name + " to your workouts", Toast.LENGTH_SHORT).show();
+
+                                //clear the edit texts to allow for another entry
+                                exerciseNameText.setText("");
+                                sets.setText("");
+                                repetitions.setText("");
+                                minutes.setText("");
+                                seconds.setText("");
+
+                            }
+                        }
+                    });
+                }
+            });
+
+
+            return dialog;
+
+
+        } else {
+
+            builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.M)
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    String name = exerciseNameText.getText().toString();
+                    String setNumberEditText = sets.getText().toString();
+                    String repsEditText = repetitions.getText().toString();
+                    String minsEditText = minutes.getText().toString();
+                    String secondsEditText = seconds.getText().toString();
+
+                    if (    name.isEmpty()                          ||//form validation
+                            setNumberEditText.isEmpty()             ||
+                            repsEditText.isEmpty()                  ||
+                            minsEditText.isEmpty()                  ||
+                            secondsEditText.isEmpty()) {
+
+                            Toast.makeText(getContext(), "Some or all fields were left blank, no workout was created", Toast.LENGTH_LONG).show();
+
+
+                    } else {
+
+                        int setNumber = Integer.parseInt(setNumberEditText);
+                        int reps = Integer.parseInt(repsEditText);
+                        int mins = Integer.parseInt(minsEditText);
+                        int secs = Integer.parseInt(secondsEditText);
+
+                        Utils.getInstantiation(getContext()).addWorkout(new Workout(name, setNumber, reps, mins, secs));
+                        Toast.makeText(getContext(), "Add " + name + " to your workouts list", Toast.LENGTH_SHORT).show();
+
+
+                    }
+                }
+            });
+        }
 
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
