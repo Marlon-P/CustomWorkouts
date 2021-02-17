@@ -1,6 +1,7 @@
 package com.example.customworkouts;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -34,9 +35,9 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private WorkoutRecyclerViewAdapter adapter;
-    private Utils utils;
     private FloatingActionButton menuOpenFAB;
     private BottomNavigationView bottomNavView;
+    private  Utils utils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,8 +83,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        utils = new Utils(this);
-
 
         adapter = new WorkoutRecyclerViewAdapter();
 
@@ -95,19 +94,22 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
 
         recyclerView.setLayoutManager(linearLayoutManager);
+        utils = Utils.getInstance(recyclerView.getContext(), adapter);
 
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
-            private ColorDrawable background = new ColorDrawable(getResources().getColor(R.color.purple_500));
+
+
+
+
 
             //swap two workouts with each other
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder dragged, @NonNull RecyclerView.ViewHolder target) {
+                int d_pos = dragged.getAdapterPosition();
+                int t_pos = target.getAdapterPosition();
 
-                int dragged_pos = dragged.getAdapterPosition();
-                int target_pos = target.getAdapterPosition();
-
-                utils.getInstance(recyclerView.getContext(), adapter).swap(dragged_pos, target_pos);
-                return false;
+                utils.swap(d_pos, t_pos);
+                return true;
             }
 
             @Override
@@ -124,8 +126,8 @@ public class MainActivity extends AppCompatActivity {
                 linearLayoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
 
-        ArrayList<Workout> workouts = utils.getInstance(this, adapter).getWorkouts();
-        adapter.setWorkouts(workouts);
+
+        adapter.setWorkouts(Utils.getInstance(this).getWorkoutsList());
 
 
     }
@@ -139,9 +141,9 @@ public class MainActivity extends AppCompatActivity {
         CreateWorkoutFragment createWorkoutFragment = new CreateWorkoutFragment();
         Bundle bundle = new Bundle();
         bundle.putBoolean("multiAdd", false);
+
         createWorkoutFragment.setArguments(bundle);
         createWorkoutFragment.show(getFragmentManager(), CreateWorkoutFragment.TAG);
-
 
 
     }
@@ -167,9 +169,9 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (Utils.getInstantiation(view.getContext()).deleteAll()) {
+                if (Utils.getInstance(view.getContext()).deleteAll()) {
                     Toast.makeText(view.getContext(), "Deleted All Workouts", Toast.LENGTH_SHORT).show();
-
+                    adapter.setWorkouts(utils.getWorkoutsList());
                 }
 
             }
@@ -182,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
         });
         builder.create();
         builder.show();
+
     }
 
 

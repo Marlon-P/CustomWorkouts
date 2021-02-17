@@ -68,6 +68,7 @@ public class CreateWorkoutFragment extends DialogFragment {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -92,7 +93,7 @@ public class CreateWorkoutFragment extends DialogFragment {
         minutes = view.findViewById(R.id.editTextMinutes);
         seconds = view.findViewById(R.id.editTextSeconds);
 
-
+        Context context = getContext();
 
         if (multiAdd) {
 
@@ -103,13 +104,13 @@ public class CreateWorkoutFragment extends DialogFragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     if (workouts.isEmpty()) {
-                        Toast.makeText(getContext(), "No Workouts Added", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "No Workouts Added", Toast.LENGTH_LONG).show();
                     } else {
-                        Utils.getInstantiation(getContext()).addWorkouts(workouts);
+                        Utils.getInstance(context).addWorkouts(workouts);
                         if (workouts.size() > 1) {
-                            Toast.makeText(view.getContext(), "Added " + workouts.size() + " workouts to your list", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Added " + workouts.size() + " workouts to your list", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(view.getContext(), "Added a new Workout", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Added a new Workout", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
@@ -147,7 +148,7 @@ public class CreateWorkoutFragment extends DialogFragment {
                                     minsEditText.isEmpty()                  ||
                                     secondsEditText.isEmpty()) {
 
-                                Toast.makeText(view.getContext(), "Some or all fields were left blank, no workout was created", Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, "Some or all fields were left blank, no workout was created", Toast.LENGTH_LONG).show();
 
 
                             } else {
@@ -157,7 +158,7 @@ public class CreateWorkoutFragment extends DialogFragment {
                                 int secs = Integer.parseInt(secondsEditText);
 
                                 workouts.add(new Workout(name, setNumber, reps, mins, secs));
-                                Toast.makeText(view.getContext(), "Added " + name + " to your workouts", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "Added " + name + " to your workouts", Toast.LENGTH_SHORT).show();
 
                                 //clear the edit texts to allow for another entry
                                 exerciseNameText.setText("");
@@ -195,7 +196,7 @@ public class CreateWorkoutFragment extends DialogFragment {
                             minsEditText.isEmpty()                  ||
                             secondsEditText.isEmpty()) {
 
-                            Toast.makeText(getContext(), "Some or all fields were left blank, no workout was created", Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, "Some or all fields were left blank, no workout was created", Toast.LENGTH_LONG).show();
 
 
                     } else {
@@ -205,8 +206,9 @@ public class CreateWorkoutFragment extends DialogFragment {
                         int mins = Integer.parseInt(minsEditText);
                         int secs = Integer.parseInt(secondsEditText);
 
-                        Utils.getInstantiation(getContext()).addWorkout(new Workout(name, setNumber, reps, mins, secs));
-                        Toast.makeText(getContext(), "Add " + name + " to your workouts list", Toast.LENGTH_SHORT).show();
+                        Utils.getInstance(context).addWorkout(new Workout(name, setNumber, reps, mins, secs));
+
+                        Toast.makeText(context, "Add " + name + " to your workouts list", Toast.LENGTH_SHORT).show();
 
 
                     }

@@ -31,6 +31,7 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
     private ArrayList<Workout> workouts;
 
 
+
     public void setWorkouts(ArrayList<Workout> workouts) {
 
         this.workouts = workouts;
@@ -38,6 +39,7 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
 
 
     }
+
 
     @NonNull
     @Override
@@ -51,6 +53,8 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
+            Context context = holder.itemView.getContext();
+            Utils utils = Utils.getInstance(context);
 
             Workout w = workouts.get(position);
 
@@ -88,10 +92,10 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
                     @Override
                     public void onClick(View v) {
                         EditText exerciseNameText, sets, repetitions, minutes, seconds;
-                        AlertDialog.Builder builder = new AlertDialog.Builder(holder.itemView.getContext(), AlertDialog.THEME_DEVICE_DEFAULT_DARK);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
 
 
-                        LayoutInflater inflater = (LayoutInflater) holder.itemView.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
                         View view = inflater.inflate(R.layout.create_workout, null);
                         View titleView = inflater.inflate(R.layout.edit_dialog_title, null);
@@ -128,7 +132,8 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
                                 int mins = Integer.parseInt(minutes.getText().toString());
                                 int secs = Integer.parseInt(seconds.getText().toString());
 
-                                Utils.getInstantiation(holder.itemView.getContext()).editWorkout(position, name, setNumber, reps, mins, secs);
+                                utils.editWorkout(position, name, setNumber, reps, mins, secs);
+                                setWorkouts(utils.getWorkoutsList());
                                 holder.edit_delete_option_menu.setVisibility(View.GONE);
                             }
                         });
@@ -146,12 +151,13 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
                 holder.deleteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(holder.itemView.getContext(), AlertDialog.THEME_DEVICE_DEFAULT_DARK);
+                        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
                         builder.setMessage("Are you sure you want to delete this workout?");
                         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Utils.getInstantiation(holder.itemView.getContext()).removeWorkout(w);
+                                utils.removeWorkout(w);
+                                setWorkouts(utils.getWorkoutsList());
                                 holder.edit_delete_option_menu.setVisibility(View.GONE);
 
                             }
@@ -170,6 +176,7 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
 
 
     }
+
 
     @Override
     public int getItemCount() {
@@ -208,11 +215,7 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
         }
     }
 
-    public class Header {
 
-        private String groupName;
-
-    }
 
 
 }
