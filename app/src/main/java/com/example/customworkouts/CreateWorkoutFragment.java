@@ -73,7 +73,7 @@ public class CreateWorkoutFragment extends DialogFragment {
 
         Bundle bundle = getArguments();
         multiAdd = bundle.getBoolean("multiAdd");
-        System.out.println("MULTIADD IS " + multiAdd);
+
 
         AlertDialog dialog;
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_DEVICE_DEFAULT_DARK);

@@ -72,7 +72,7 @@ public class Utils {
         editor.remove(WORKOUTS_KEY);
         editor.putString(WORKOUTS_KEY, gson.toJson(workouts));
         editor.apply();
-        adapter.notifyItemMoved(from_pos, target_pos);
+        adapter.setWorkouts(workouts);
     }
 
     private void initData() {

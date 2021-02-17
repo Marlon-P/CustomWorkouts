@@ -24,6 +24,8 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -34,11 +36,21 @@ public class MainActivity extends AppCompatActivity {
     private WorkoutRecyclerViewAdapter adapter;
     private Utils utils;
     private FloatingActionButton menuOpenFAB;
+    private BottomNavigationView bottomNavView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        bottomNavView = findViewById(R.id.bottomNavView);
+        bottomNavView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                return false;
+            }
+        });
 
 
         menuOpenFAB = findViewById(R.id.open_menu_FAB);

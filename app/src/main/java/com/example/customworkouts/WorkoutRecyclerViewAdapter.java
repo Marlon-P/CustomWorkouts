@@ -129,6 +129,7 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
                                 int secs = Integer.parseInt(seconds.getText().toString());
 
                                 Utils.getInstantiation(holder.itemView.getContext()).editWorkout(position, name, setNumber, reps, mins, secs);
+                                holder.edit_delete_option_menu.setVisibility(View.GONE);
                             }
                         });
                         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -151,6 +152,7 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Utils.getInstantiation(holder.itemView.getContext()).removeWorkout(w);
+                                holder.edit_delete_option_menu.setVisibility(View.GONE);
 
                             }
                         });

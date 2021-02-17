@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="@color/gray"
+    android:background="@color/black"
     >
 
 
@@ -28,53 +28,53 @@
     </com.google.android.material.appbar.MaterialToolbar>
 
 
+
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/workoutsRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/topAppBar"
 
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="56dp"
+        android:layout_marginBottom="56dp"
         tools:layout_editor_absoluteY="56dp" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:fabCradleMargin="10dp"
+        app:fabCradleRoundedCornerRadius="10dp"
+        app:fabCradleVerticalOffset="10dp"
+        android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar.Bridge">
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:menu="@menu/bottom_nav_menu"
+            app:itemIconTint="@color/white"
+            app:itemTextColor="@color/white"
+            android:background="@color/darker_gray"
+            >
+
+        </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+
+    </com.google.android.material.bottomappbar.BottomAppBar>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/open_menu_FAB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical"
+        android:src="@drawable/ic_add"
 
-        >
+        app:layout_anchor="@id/bottomAppBar"
+        android:backgroundTint="@color/teal_200"
+        app:fabCustomSize="60dp">
+    </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
-
-        <!-- margin bottom not working in RelLayout so wrapped in LinearLayout -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/open_menu_FAB"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:contentDescription="@string/add_icon"
-            android:backgroundTint="@color/teal_200"
-            android:elevation="5dp"
-            app:fabSize="mini"
-            android:src="@drawable/ic_add"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-        </com.google.android.material.floatingactionbutton.FloatingActionButton>
-
-
-
-
-
-
-
-
-
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
