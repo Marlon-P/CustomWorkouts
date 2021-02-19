@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,101 +35,90 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-    private WorkoutRecyclerViewAdapter adapter;
+
     private FloatingActionButton menuOpenFAB;
     private BottomNavigationView bottomNavView;
-    private  Utils utils;
+    private HomeFragment homeFragment;
+    private ProfileFragment profileFragment;
+    private String currentFragment = "HOME";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        profileFragment = new ProfileFragment();
+        homeFragment = new HomeFragment();
 
         bottomNavView = findViewById(R.id.bottomNavView);
+
         bottomNavView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                return false;
+
+                if (item.getTitle().equals("Profiles")) {
+                    currentFragment = "PROFILE";
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, profileFragment, "PROFILE").commit();
+                } else  if (item.getTitle().equals("Workouts")) {
+                    currentFragment = "HOME";
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, homeFragment,"HOME").commit();
+                }
+
+                return true;
             }
+
         });
 
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new HomeFragment()).commit();
 
         menuOpenFAB = findViewById(R.id.open_menu_FAB);
-
-
-
         menuOpenFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PopupMenu popupMenu = new PopupMenu(MainActivity.this, v);
-                popupMenu.getMenuInflater().inflate(R.menu.popup_menu,popupMenu.getMenu());
+                if (currentFragment.equals("HOME")) {
+                    popupMenu.getMenuInflater().inflate(R.menu.popup_menu,popupMenu.getMenu());
 
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @RequiresApi(api = Build.VERSION_CODES.M)
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if (item.getTitle().equals("Delete All")) {
-                            deleteAll(v);
-                        } else if (item.getTitle().equals("Add a Workout")) {
-                            addWorkout(v);
-                        } else {
-                            System.out.println("Adding MULTIPLE WORKOUTS");
-                            addMultiWorkouts(v);
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @RequiresApi(api = Build.VERSION_CODES.M)
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            if (item.getTitle().equals("Delete All")) {
+                                deleteAll(v);
+                            } else if (item.getTitle().equals("Add a Workout")) {
+                                addWorkout(v);
+                            } else {
+                                System.out.println("Adding MULTIPLE WORKOUTS");
+                                addMultiWorkouts(v);
+                            }
+                            return true;
                         }
-                        return true;
-                    }
-                });
+                    });
+                } else {
+                    popupMenu.getMenuInflater().inflate(R.menu.profile_popup_menu,popupMenu.getMenu());
+
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @RequiresApi(api = Build.VERSION_CODES.M)
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            if (item.getTitle().equals("New Profile")) {
+                                Toast.makeText(getApplicationContext(), "New Profile", Toast.LENGTH_SHORT).show();
+                            } else if (item.getTitle().equals("Add a Workout")) {
+                                System.out.println("ADD A WORKOUT BOI");
+                            } else {
+                                System.out.println("Adding MULTIPLE WORKOUTS");
+
+                            }
+                            return true;
+                        }
+                    });
+                }
                 popupMenu.show();
             }
         });
 
 
-        adapter = new WorkoutRecyclerViewAdapter();
 
-
-        recyclerView =findViewById(R.id.workoutsRecyclerView);
-
-        recyclerView.setAdapter(adapter);
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-
-        recyclerView.setLayoutManager(linearLayoutManager);
-        utils = Utils.getInstance(recyclerView.getContext(), adapter);
-
-        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
-
-
-
-
-
-            //swap two workouts with each other
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder dragged, @NonNull RecyclerView.ViewHolder target) {
-                int d_pos = dragged.getAdapterPosition();
-                int t_pos = target.getAdapterPosition();
-
-                utils.swap(d_pos, t_pos);
-                return true;
-            }
-
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
-            }
-
-
-        });
-
-        helper.attachToRecyclerView(recyclerView);
-
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
-                linearLayoutManager.getOrientation());
-        recyclerView.addItemDecoration(dividerItemDecoration);
-
-
-        adapter.setWorkouts(Utils.getInstance(this).getWorkoutsList());
 
 
     }
@@ -160,18 +151,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-
     public void deleteAll(View view) {
 
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
         builder.setMessage("Are you sure you want to delete all workouts?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
                 if (Utils.getInstance(view.getContext()).deleteAll()) {
                     Toast.makeText(view.getContext(), "Deleted All Workouts", Toast.LENGTH_SHORT).show();
-                    adapter.setWorkouts(utils.getWorkoutsList());
+                    //refresh fragment to show deleted views
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new HomeFragment()).commit();
                 }
 
             }
@@ -186,6 +177,10 @@ public class MainActivity extends AppCompatActivity {
         builder.show();
 
     }
+
+
+
+
 
 
 

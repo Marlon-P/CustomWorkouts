@@ -31,15 +31,13 @@
 
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/workoutsRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/topAppBar"
+  <FrameLayout
+      android:id="@+id/fragmentContainer"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
 
-        android:layout_marginTop="56dp"
-        android:layout_marginBottom="56dp"
-        tools:layout_editor_absoluteY="56dp" />
+    </FrameLayout>
+
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"

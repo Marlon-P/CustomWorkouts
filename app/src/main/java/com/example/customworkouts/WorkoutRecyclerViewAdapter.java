@@ -207,11 +207,7 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
             timer = itemView.findViewById(R.id.timer);
 
             edit_delete_option_menu = itemView.findViewById(R.id.edit_delete_options);
-
-
-
-
-
+            
         }
     }
 
