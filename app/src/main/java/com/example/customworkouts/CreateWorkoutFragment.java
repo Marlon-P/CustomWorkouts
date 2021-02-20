@@ -25,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
 
@@ -37,7 +38,6 @@ public class CreateWorkoutFragment extends DialogFragment {
 
     private boolean multiAdd = false;
     public static String TAG = "CreateWorkoutFragmentDialog";//used as a key for storing the workouts in local storage
-
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public CreateWorkoutFragment() {
@@ -75,7 +75,6 @@ public class CreateWorkoutFragment extends DialogFragment {
         Bundle bundle = getArguments();
         multiAdd = bundle.getBoolean("multiAdd");
 
-
         AlertDialog dialog;
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_DEVICE_DEFAULT_DARK);
 
@@ -112,6 +111,7 @@ public class CreateWorkoutFragment extends DialogFragment {
                         } else {
                             Toast.makeText(context, "Added a new Workout", Toast.LENGTH_SHORT).show();
                         }
+                        MainActivity.fgm.beginTransaction().replace(R.id.fragmentContainer, new HomeFragment()).commit();
                     }
                 }
             });
@@ -207,7 +207,7 @@ public class CreateWorkoutFragment extends DialogFragment {
                         int secs = Integer.parseInt(secondsEditText);
 
                         Utils.getInstance(context).addWorkout(new Workout(name, setNumber, reps, mins, secs));
-
+                        MainActivity.fgm.beginTransaction().replace(R.id.fragmentContainer, new HomeFragment()).commit();
                         Toast.makeText(context, "Add " + name + " to your workouts list", Toast.LENGTH_SHORT).show();
 
 

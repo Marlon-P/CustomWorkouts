@@ -5,8 +5,6 @@
     >
     <item android:id="@+id/singleAdd"
         android:title="New Profile" />
-    <item android:id="@+id/multiAdd"
-        android:title="Add Multiple Workouts" />
     <item android:id="@+id/deleteAll"
         android:title="Delete All" />
 

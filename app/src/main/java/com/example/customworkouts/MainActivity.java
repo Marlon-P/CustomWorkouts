@@ -1,5 +1,6 @@
 package com.example.customworkouts;
 
+import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -20,6 +21,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -41,14 +43,17 @@ public class MainActivity extends AppCompatActivity {
     private HomeFragment homeFragment;
     private ProfileFragment profileFragment;
     private String currentFragment = "HOME";
+    public static FragmentManager fgm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        fgm = getSupportFragmentManager();
         profileFragment = new ProfileFragment();
         homeFragment = new HomeFragment();
+
 
         bottomNavView = findViewById(R.id.bottomNavView);
 
@@ -58,10 +63,12 @@ public class MainActivity extends AppCompatActivity {
 
                 if (item.getTitle().equals("Profiles")) {
                     currentFragment = "PROFILE";
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, profileFragment, "PROFILE").commit();
+                    fgm.beginTransaction().replace(R.id.fragmentContainer, profileFragment, "PROFILE").commit();
                 } else  if (item.getTitle().equals("Workouts")) {
                     currentFragment = "HOME";
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, homeFragment,"HOME").commit();
+                    fgm.beginTransaction().replace(R.id.fragmentContainer, homeFragment,"HOME").commit();
+                } else {
+                    Utils.getInstance(MainActivity.this).populate();
                 }
 
                 return true;
@@ -69,7 +76,8 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new HomeFragment()).commit();
+
+        fgm.beginTransaction().replace(R.id.fragmentContainer, homeFragment).commit();
 
         menuOpenFAB = findViewById(R.id.open_menu_FAB);
         menuOpenFAB.setOnClickListener(new View.OnClickListener() {
@@ -102,7 +110,8 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
                             if (item.getTitle().equals("New Profile")) {
-                                Toast.makeText(getApplicationContext(), "New Profile", Toast.LENGTH_SHORT).show();
+                                CreateProfileFragment createProfileFragment = new CreateProfileFragment();
+                                createProfileFragment.show(fgm, CreateProfileFragment.TAG);
                             } else if (item.getTitle().equals("Add a Workout")) {
                                 System.out.println("ADD A WORKOUT BOI");
                             } else {
@@ -147,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
         createWorkoutFragment.setArguments(bundle);
 
         createWorkoutFragment.show(getFragmentManager(), CreateWorkoutFragment.TAG);
+        //getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new HomeFragment()).commit();
 
 
     }
@@ -162,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
                 if (Utils.getInstance(view.getContext()).deleteAll()) {
                     Toast.makeText(view.getContext(), "Deleted All Workouts", Toast.LENGTH_SHORT).show();
                     //refresh fragment to show deleted views
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new HomeFragment()).commit();
+                   fgm.beginTransaction().replace(R.id.fragmentContainer, new HomeFragment()).commit();
                 }
 
             }

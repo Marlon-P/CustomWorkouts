@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -29,6 +30,8 @@ import java.util.ArrayList;
 public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecyclerViewAdapter.ViewHolder>  {
 
     private ArrayList<Workout> workouts;
+
+
 
 
 
@@ -44,6 +47,7 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
             View view;
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.workout_layout, parent, false);
 
@@ -55,7 +59,6 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
 
             Context context = holder.itemView.getContext();
             Utils utils = Utils.getInstance(context);
-
             Workout w = workouts.get(position);
 
             String exerciseName = w.getExerciseName();
@@ -135,6 +138,7 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
                                 utils.editWorkout(position, name, setNumber, reps, mins, secs);
                                 setWorkouts(utils.getWorkoutsList());
                                 holder.edit_delete_option_menu.setVisibility(View.GONE);
+                                MainActivity.fgm.beginTransaction().replace(R.id.fragmentContainer, new HomeFragment()).commit();
                             }
                         });
                         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -159,7 +163,7 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
                                 utils.removeWorkout(w);
                                 setWorkouts(utils.getWorkoutsList());
                                 holder.edit_delete_option_menu.setVisibility(View.GONE);
-
+                                MainActivity.fgm.beginTransaction().replace(R.id.fragmentContainer, new HomeFragment()).commit();
                             }
                         });
                         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -207,7 +211,7 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
             timer = itemView.findViewById(R.id.timer);
 
             edit_delete_option_menu = itemView.findViewById(R.id.edit_delete_options);
-            
+
         }
     }
 

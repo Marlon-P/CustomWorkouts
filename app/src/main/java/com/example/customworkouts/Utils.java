@@ -184,4 +184,16 @@ public class Utils {
     public ArrayList<Workout> getWorkoutsList() {
         return workoutArrayList;
     }
+
+    public void createProfile(String key, ArrayList<Workout> w) {
+
+    }
+
+    public void populate() {
+        for (int i = 1; i < 12; i++) {
+            Workout w = new Workout("Workout " + i, 2, 2, 2, 2);
+            workoutArrayList.add(w);
+        }
+        updateWorkoutsList();
+    }
 }

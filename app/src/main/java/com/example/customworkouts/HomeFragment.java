@@ -40,6 +40,8 @@ public class HomeFragment extends Fragment {
         System.out.println("INFLATING FRAGMENT");
         View view = inflater.inflate(R.layout.workout_container_fragment, container, false);
 
+
+
         recyclerView = view.findViewById(R.id.workoutsRecyclerView);
         recyclerView.setAdapter(adapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
