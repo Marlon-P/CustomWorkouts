@@ -16,9 +16,11 @@ public class WorkoutGroup {
 
 
 
-    public void addWorkout(Workout w) {
+    public void add(Workout w) {
         workouts.add(w);
     }
+
+    public void remove(Workout w) {workouts.remove(w);}
 
     public String getName() {
         return name;
@@ -34,5 +36,14 @@ public class WorkoutGroup {
 
     public void setWorkouts(ArrayList<Workout> workouts) {
         this.workouts = workouts;
+    }
+
+    public Workout getWorkout(int position) {
+        return workouts.get(position);
+    }
+
+    @Override
+    public String toString() {
+        return name + " size: " + workouts.get(0).getExerciseName();
     }
 }

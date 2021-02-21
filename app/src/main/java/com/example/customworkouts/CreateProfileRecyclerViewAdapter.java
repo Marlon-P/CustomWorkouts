@@ -22,10 +22,10 @@ import java.util.ArrayList;
 public class CreateProfileRecyclerViewAdapter extends RecyclerView.Adapter<CreateProfileRecyclerViewAdapter.ViewHolder>{
 
     private ArrayList<Workout> workouts;
-    private ArrayList<Workout> group;
+    private WorkoutGroup group;
 
     public CreateProfileRecyclerViewAdapter() {
-        group = new ArrayList<>();
+        group = new WorkoutGroup("");
     }
 
     public void setWorkouts(ArrayList<Workout> w) {
@@ -46,9 +46,6 @@ public class CreateProfileRecyclerViewAdapter extends RecyclerView.Adapter<Creat
 
     @Override
     public void onBindViewHolder(@NonNull CreateProfileRecyclerViewAdapter.ViewHolder holder, int position) {
-
-
-
 
 
         Workout w = workouts.get(position);
@@ -92,7 +89,7 @@ public class CreateProfileRecyclerViewAdapter extends RecyclerView.Adapter<Creat
 
     }
 
-    public ArrayList<Workout> getProfile() {
+    public WorkoutGroup getProfile() {
         return group;
     }
 

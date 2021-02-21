@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -14,10 +15,10 @@ import java.util.Map;
 
 public class ProfileRecyclerViewAdapter extends RecyclerView.Adapter<ProfileRecyclerViewAdapter.ViewHolder> {
 
-    private ArrayList<ArrayList<Workout>> workoutSet;
+    private ArrayList<WorkoutGroup> workoutSet;
     private Utils profileUtils;
 
-    public void setWorkouts( ArrayList<ArrayList<Workout>> workouts) {
+    public void setWorkouts( ArrayList<WorkoutGroup> workouts) {
         this.workoutSet = workouts;
     }
 
@@ -38,8 +39,12 @@ public class ProfileRecyclerViewAdapter extends RecyclerView.Adapter<ProfileRecy
 
 
         CardProfileRecyclerViewAdapter adapter = new CardProfileRecyclerViewAdapter();
-
-
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(holder.itemView.getContext());
+        WorkoutGroup wg = workoutSet.get(position);
+        adapter.setWorkouts(wg.getWorkouts());
+        holder.profileName.setText(wg.getName());
+        holder.cardRecyclerView.setAdapter(adapter);
+        holder.cardRecyclerView.setLayoutManager(linearLayoutManager);
 
     }
 
@@ -60,6 +65,7 @@ public class ProfileRecyclerViewAdapter extends RecyclerView.Adapter<ProfileRecy
             card = itemView.findViewById(R.id.profileCardView);
             profileName = itemView.findViewById(R.id.profileCardName);
             cardRecyclerView = itemView.findViewById(R.id.cardProfileRecyclerView);
+
         }
     }
 }

@@ -170,9 +170,7 @@ public class Utils {
     }
 
     private static ArrayList<Workout> getWorkouts() {
-
         Type type = new TypeToken<ArrayList<Workout>>(){}.getType();
-
         return gson.fromJson(sharedPreferences.getString(WORKOUTS_KEY, null), type);
     }
 
@@ -180,8 +178,25 @@ public class Utils {
         return workoutArrayList;
     }
 
-    public boolean updateProfile(String profileName, ArrayList<Workout> newProfile) {
-        ArrayList<Workout> wList = getProfile(profileName);
+    public boolean createProfile(String profileName, WorkoutGroup w) {
+
+        WorkoutGroup wList = getProfile(profileName);
+
+        if (wList != null) {
+            return false;
+        }
+
+        w.setName(profileName);
+        profilesEditor = profiles.edit();
+        profilesEditor.putString(profileName, gson.toJson(w));
+        profilesEditor.apply();
+
+
+        return true;
+    }
+
+    public boolean updateProfile(String profileName, WorkoutGroup newProfile) {
+        WorkoutGroup wList = getProfile(profileName);
 
         if (wList == null) {
             return false;
@@ -192,44 +207,29 @@ public class Utils {
         profilesEditor.putString(profileName, gson.toJson(newProfile));
         profilesEditor.apply();
 
-        cardProfileRecyclerViewAdapter.setWorkouts(newProfile);
+
         return true;
     }
 
-    public ArrayList<Workout> getProfile(String profileName) {
-        Type type = new TypeToken<ArrayList<Workout>>(){}.getType();
+    public WorkoutGroup getProfile(String profileName) {
+        Type type = new TypeToken<WorkoutGroup>(){}.getType();
         return gson.fromJson(profiles.getString(profileName, null), type);
     }
 
-    public boolean createProfile(String profileName, ArrayList<Workout> w) {
-
-        ArrayList<Workout> wList = getProfile(profileName);
-
-        if (wList != null) {
-            return false;
-        }
-
-        profilesEditor = profiles.edit();
-        profilesEditor.putString(profileName, gson.toJson(w));
-        profilesEditor.apply();
-
-
-        return true;
-    }
-
     public boolean addToProfile(String profileName, Workout w) {
-        ArrayList<Workout> wList = getProfile(profileName);
+        WorkoutGroup wList = getProfile(profileName);
 
-        if (wList != null) {
+        if (wList == null) {
             return false;
         }
 
-
+        wList.add(w);
+        updateProfile(profileName, wList);
         return true;
     }
 
     public boolean deleteFromProfile(String profileName, Workout w) {
-        ArrayList<Workout> wList = getProfile(profileName);
+        WorkoutGroup wList = getProfile(profileName);
 
         if (wList == null) {
             return false;
@@ -242,7 +242,7 @@ public class Utils {
     }
 
     public boolean deleteProfile(String profileName) {
-        ArrayList<Workout> wList = getProfile(profileName);
+        WorkoutGroup wList = getProfile(profileName);
 
         //if list is null then that means list with the key of "profileName" does not exist
         if (wList == null) {
@@ -252,6 +252,14 @@ public class Utils {
         profilesEditor = profiles.edit();
         profilesEditor.remove(profileName);
         profilesEditor.apply();
+        return true;
+    }
+
+    public boolean deleteAllProfiles() {
+        profilesEditor = profiles.edit();
+        profilesEditor.clear();
+        profilesEditor.apply();
+
         return true;
     }
 
@@ -285,15 +293,15 @@ public class Utils {
         updateWorkoutsList();
     }
 
-    public ArrayList<ArrayList<Workout>> getProfiles() {
-       /* ArrayList<ArrayList<Workout>> workoutProfiles = new ArrayList<>();
-        Type type = new TypeToken<ArrayList<Workout>>(){}.getType();
+    public ArrayList<WorkoutGroup> getProfiles() {
+        ArrayList<WorkoutGroup> w = new ArrayList<>();
 
-        for (Map.Entry<String, ?> entry : profiles.getAll().entrySet())
-            workoutProfiles.add(gson.fromJson(profiles.getString(entry.getKey(), null), type));
+        for (Map.Entry<String, ?> entry: profiles.getAll().entrySet()) {
+            System.out.println(entry.getKey());
+            w.add((getProfile(entry.getKey())));
+            System.out.println(w.get(0).toString());
+        }
 
-        return workoutProfiles;*/
-        return null;
-
+        return w;
     }
 }

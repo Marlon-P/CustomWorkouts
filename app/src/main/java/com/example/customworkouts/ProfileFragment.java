@@ -23,10 +23,10 @@ public class ProfileFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        System.out.println("INFLATING FRAGMENT");
         View profilesPageView = inflater.inflate(R.layout.profile_container_fragment, container, false);
 
         profileUtils = Utils.getInstance(context, profileAdapter);
-
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         RecyclerView profilesRecyclerView = profilesPageView.findViewById(R.id.profilesRecyclerView);

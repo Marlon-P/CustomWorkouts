@@ -24,6 +24,7 @@ public class CardProfileRecyclerViewAdapter extends RecyclerView.Adapter<CardPro
     public CardProfileRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.workout_layout, parent, false);
+        view.setBackgroundColor(parent.getResources().getColor(R.color.teal_700));
         return new CardProfileRecyclerViewAdapter.ViewHolder(view);
     }
 

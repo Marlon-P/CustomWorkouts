@@ -113,8 +113,8 @@ public class MainActivity extends AppCompatActivity {
                             if (item.getTitle().equals("New Profile")) {
                                 CreateProfileFragment createProfileFragment = new CreateProfileFragment();
                                 createProfileFragment.show(fgm, CreateProfileFragment.TAG);
-                            } else if (item.getTitle().equals("Add a Workout")) {
-                                System.out.println("ADD A WORKOUT BOI");
+                            } else if (item.getTitle().equals("Delete All")) {
+                                deleteAllProfiles(v);
                             } else {
                                 System.out.println("Adding MULTIPLE WORKOUTS");
 
@@ -162,6 +162,30 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void deleteAllProfiles(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
+        builder.setMessage("Are you sure you want to delete all profiles?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                if (Utils.getInstance(view.getContext()).deleteAllProfiles()) {
+                    Toast.makeText(view.getContext(), "Deleted All Profiles", Toast.LENGTH_SHORT).show();
+                    //refresh fragment to show deleted views
+                    fgm.beginTransaction().replace(R.id.fragmentContainer, new ProfileFragment()).commit();
+                }
+
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.create();
+        builder.show();
+    }
     public void deleteAll(View view) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);

@@ -79,14 +79,5 @@ public class HomeFragment extends Fragment {
     }
 
 
-    public void update(FragmentManager fmg) {
-        if (fmg == null) {
-            System.out.println("NULL AS FUCK");
-        } else {
-           fmg.beginTransaction()
-                   .detach(this)
-                   .attach(this)
-                   .commit();
-        }
-    }
+
 }
