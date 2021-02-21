@@ -2,7 +2,6 @@ package com.example.customworkouts;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -10,26 +9,32 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Map;
 
 public class Utils {
 
     private static final String WORKOUTS_KEY = "workouts";
     private static Utils instance;
     private static SharedPreferences sharedPreferences;
+    private static SharedPreferences profiles;
+    private SharedPreferences.Editor allWorkoutsEditor;
+    private SharedPreferences.Editor profilesEditor;
     private static ArrayList<Workout> workoutArrayList; //copy of workouts list in storage
-    private static WorkoutRecyclerViewAdapter adapter;
+    private static WorkoutRecyclerViewAdapter workoutRecyclerViewAdapter;
+    private static ProfileRecyclerViewAdapter profileRecyclerViewAdapter;
+    private static CardProfileRecyclerViewAdapter cardProfileRecyclerViewAdapter;
+    private static Gson gson;
 
 
     private Utils(Context context) {
-
         sharedPreferences = context.getSharedPreferences("WorkoutDb", Context.MODE_PRIVATE);
-
+        profiles = context.getSharedPreferences("ProfilesDb", Context.MODE_PRIVATE);
+        gson = new Gson();
         if (null == getWorkouts()) {
             initData();
         } else {
             workoutArrayList = getWorkouts();
         }
-
     }
 
 
@@ -38,7 +43,6 @@ public class Utils {
             instance = new Utils(context);
 
         }
-
         workoutArrayList = getWorkouts();
         return instance;
     }
@@ -46,7 +50,27 @@ public class Utils {
     public static Utils getInstance(Context context, WorkoutRecyclerViewAdapter adapter) {
         if (instance == null) {
             instance = new Utils(context);
-            Utils.adapter = adapter;
+            Utils.workoutRecyclerViewAdapter = adapter;
+        }
+
+        workoutArrayList = getWorkouts();
+        return instance;
+    }
+
+    public static Utils getInstance(Context context, ProfileRecyclerViewAdapter adapter) {
+        if (instance == null) {
+            instance = new Utils(context);
+            Utils.profileRecyclerViewAdapter = adapter;
+        }
+
+        workoutArrayList = getWorkouts();
+        return instance;
+    }
+
+    public static Utils getInstance(Context context, CardProfileRecyclerViewAdapter adapter) {
+        if (instance == null) {
+            instance = new Utils(context);
+            Utils.cardProfileRecyclerViewAdapter = adapter;
         }
 
         workoutArrayList = getWorkouts();
@@ -57,25 +81,21 @@ public class Utils {
 
 
     private void initData() {
-
         workoutArrayList = new ArrayList<>();
 
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+        allWorkoutsEditor = sharedPreferences.edit();
         Gson gson = new Gson();
-        editor.putString(WORKOUTS_KEY, gson.toJson(workoutArrayList));
-        editor.apply(); //commit occurs immediately, apply() works in the background
+        allWorkoutsEditor.putString(WORKOUTS_KEY, gson.toJson(workoutArrayList));
+        allWorkoutsEditor.apply(); //commit occurs immediately, apply() works in the background
 
     }
 
     public ArrayList<Workout> swap(int from_pos, int target_pos) {
-
         for (Workout d: workoutArrayList) {
             System.out.println(d.getExerciseName());
         }
 
         Collections.swap(workoutArrayList, from_pos, target_pos);
-
 
         System.out.println("---------------");
         for (Workout d: workoutArrayList) {
@@ -83,41 +103,30 @@ public class Utils {
         }
 
         updateWorkoutsList();
-        adapter.notifyItemMoved(from_pos, target_pos);
+        workoutRecyclerViewAdapter.notifyItemMoved(from_pos, target_pos);
 
         return workoutArrayList;
     }
 
     public void addWorkout(Workout workout) {
-
-
-
         if (workoutArrayList.add(workout)) {
 
             updateWorkoutsList();
-            adapter.setWorkouts(workoutArrayList);
+            workoutRecyclerViewAdapter.setWorkouts(workoutArrayList);
 
         }
-
-
     }
 
     public void addWorkouts(ArrayList<Workout> w) {
-
-
-
         if (workoutArrayList.addAll(w)) {
 
             updateWorkoutsList();
-            adapter.setWorkouts(workoutArrayList);
+            workoutRecyclerViewAdapter.setWorkouts(workoutArrayList);
 
         }
     }
 
     public void editWorkout(int pos, String name, int sets, int reps, int minutes, int seconds) {
-
-
-
         Workout w = workoutArrayList.get(pos);
         w.setExerciseName(name);
         w.setSets(sets);
@@ -126,11 +135,10 @@ public class Utils {
         w.setSeconds(seconds);
 
         updateWorkoutsList();
-        adapter.setWorkouts(workoutArrayList);
+        workoutRecyclerViewAdapter.setWorkouts(workoutArrayList);
     }
 
     public void removeWorkout(Workout workout) {
-
         Workout removeWorkout = new Workout("", 0,0,0,0);
 
         for (Workout w : workoutArrayList) {
@@ -141,31 +149,20 @@ public class Utils {
         if (!removeWorkout.equals(new Workout("", 0,0,0,0)) ) {
             workoutArrayList.remove(removeWorkout);
             updateWorkoutsList();
-            setAdapterData();
+            workoutRecyclerViewAdapter.setWorkouts(workoutArrayList);
         }
-
-
-
     }
 
     public void updateWorkoutsList() {
-        Gson gson = new Gson();
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.remove(WORKOUTS_KEY);
-        editor.putString(WORKOUTS_KEY, gson.toJson(workoutArrayList));
-        editor.apply();
-
-
-
+        allWorkoutsEditor = sharedPreferences.edit();
+        allWorkoutsEditor.remove(WORKOUTS_KEY);
+        allWorkoutsEditor.putString(WORKOUTS_KEY, gson.toJson(workoutArrayList));
+        allWorkoutsEditor.apply();
     }
 
-    private void setAdapterData() {
-        adapter.setWorkouts(workoutArrayList);
-    }
+
 
     public boolean deleteAll() {
-
-
         workoutArrayList.clear();//after clearing all itmes in the list, create a new empty arraylist to add to
         updateWorkoutsList();
 
@@ -174,8 +171,6 @@ public class Utils {
 
     private static ArrayList<Workout> getWorkouts() {
 
-
-        Gson gson = new Gson();
         Type type = new TypeToken<ArrayList<Workout>>(){}.getType();
 
         return gson.fromJson(sharedPreferences.getString(WORKOUTS_KEY, null), type);
@@ -185,15 +180,120 @@ public class Utils {
         return workoutArrayList;
     }
 
-    public void createProfile(String key, ArrayList<Workout> w) {
+    public boolean updateProfile(String profileName, ArrayList<Workout> newProfile) {
+        ArrayList<Workout> wList = getProfile(profileName);
 
+        if (wList == null) {
+            return false;
+        }
+
+        profilesEditor = profiles.edit();
+        profilesEditor.remove(profileName);
+        profilesEditor.putString(profileName, gson.toJson(newProfile));
+        profilesEditor.apply();
+
+        cardProfileRecyclerViewAdapter.setWorkouts(newProfile);
+        return true;
+    }
+
+    public ArrayList<Workout> getProfile(String profileName) {
+        Type type = new TypeToken<ArrayList<Workout>>(){}.getType();
+        return gson.fromJson(profiles.getString(profileName, null), type);
+    }
+
+    public boolean createProfile(String profileName, ArrayList<Workout> w) {
+
+        ArrayList<Workout> wList = getProfile(profileName);
+
+        if (wList != null) {
+            return false;
+        }
+
+        profilesEditor = profiles.edit();
+        profilesEditor.putString(profileName, gson.toJson(w));
+        profilesEditor.apply();
+
+
+        return true;
+    }
+
+    public boolean addToProfile(String profileName, Workout w) {
+        ArrayList<Workout> wList = getProfile(profileName);
+
+        if (wList != null) {
+            return false;
+        }
+
+
+        return true;
+    }
+
+    public boolean deleteFromProfile(String profileName, Workout w) {
+        ArrayList<Workout> wList = getProfile(profileName);
+
+        if (wList == null) {
+            return false;
+        }
+
+        wList.remove(w);
+        updateProfile(profileName, wList);
+
+        return true;
+    }
+
+    public boolean deleteProfile(String profileName) {
+        ArrayList<Workout> wList = getProfile(profileName);
+
+        //if list is null then that means list with the key of "profileName" does not exist
+        if (wList == null) {
+            return false;
+        }
+
+        profilesEditor = profiles.edit();
+        profilesEditor.remove(profileName);
+        profilesEditor.apply();
+        return true;
     }
 
     public void populate() {
-        for (int i = 1; i < 12; i++) {
-            Workout w = new Workout("Workout " + i, 2, 2, 2, 2);
-            workoutArrayList.add(w);
-        }
+
+        Workout a = new Workout("Pull Ups", 3, 6, 1, 30);
+        Workout b = new Workout("Pistol Squats", 3, 5, 1, 30);
+        Workout c = new Workout("Dips", 3, 15, 1, 30);
+        Workout d = new Workout("Single Leg Deadlift", 3, 12, 1, 30);
+        Workout e = new Workout("Bodyweight Rows", 3, 6, 1, 30);
+        Workout f = new Workout("Handstand Push Ups", 3, 7, 1, 30);
+        Workout g = new Workout("L-sit", 3, 60, 3, 0);
+        Workout h = new Workout("Planche Push Ups", 3, 5, 4, 20);
+        Workout i = new Workout("Archer Pull Ups", 3, 9, 10, 20);
+        Workout j = new Workout("Chin Ups", 3, 8, 1, 30);
+        Workout k = new Workout("Calf Raises", 10, 99, 1, 30);
+
+        workoutArrayList.add(a);
+        workoutArrayList.add(b);
+        workoutArrayList.add(c);
+        workoutArrayList.add(d);
+        workoutArrayList.add(e);
+        workoutArrayList.add(f);
+        workoutArrayList.add(g);
+        workoutArrayList.add(h);
+        workoutArrayList.add(i);
+        workoutArrayList.add(j);
+        workoutArrayList.add(k);
+
+
         updateWorkoutsList();
+    }
+
+    public ArrayList<ArrayList<Workout>> getProfiles() {
+       /* ArrayList<ArrayList<Workout>> workoutProfiles = new ArrayList<>();
+        Type type = new TypeToken<ArrayList<Workout>>(){}.getType();
+
+        for (Map.Entry<String, ?> entry : profiles.getAll().entrySet())
+            workoutProfiles.add(gson.fromJson(profiles.getString(entry.getKey(), null), type));
+
+        return workoutProfiles;*/
+        return null;
+
     }
 }

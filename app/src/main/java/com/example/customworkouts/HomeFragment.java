@@ -51,11 +51,6 @@ public class HomeFragment extends Fragment {
         utils = Utils.getInstance(recyclerView.getContext(), adapter);
 
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
-
-
-
-
-
             //swap two workouts with each other
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder dragged, @NonNull RecyclerView.ViewHolder target) {
@@ -70,8 +65,6 @@ public class HomeFragment extends Fragment {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
             }
-
-
         });
 
         helper.attachToRecyclerView(recyclerView);

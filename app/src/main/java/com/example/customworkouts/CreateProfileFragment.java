@@ -2,11 +2,14 @@ package com.example.customworkouts;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,6 +47,8 @@ public class CreateProfileFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.create_workout_profile, null);
         View titleView = inflater.inflate(R.layout.profile_dialog_title, null);
 
+        Context context = view.getContext();
+
         builder.setView(view);
         builder.setCustomTitle(titleView);
 
@@ -58,10 +63,17 @@ public class CreateProfileFragment extends DialogFragment {
                 linearLayoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
 
+        EditText profileName = view.findViewById(R.id.editProfileName);
+
         builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                String name = profileName.getText().toString();
+                if ( Utils.getInstance(context).createProfile(name, adapter.getProfile())) {
+                    Toast.makeText(context, "Created new Profile: " + name, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "Couldn't create profile", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

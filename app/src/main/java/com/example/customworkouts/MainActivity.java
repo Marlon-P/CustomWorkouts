@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
                     fgm.beginTransaction().replace(R.id.fragmentContainer, homeFragment,"HOME").commit();
                 } else {
                     Utils.getInstance(MainActivity.this).populate();
+                    fgm.beginTransaction().replace(R.id.fragmentContainer, new HomeFragment(),"HOME").commit();
                 }
 
                 return true;
