@@ -3,6 +3,10 @@ package com.example.customworkouts;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.customworkouts.adapters.CardProfileRecyclerViewAdapter;
+import com.example.customworkouts.adapters.ProfileRecyclerViewAdapter;
+import com.example.customworkouts.adapters.WorkoutRecyclerViewAdapter;
+import com.example.customworkouts.fragments.ProfileFragment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

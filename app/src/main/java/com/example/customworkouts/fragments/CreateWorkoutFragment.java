@@ -1,4 +1,4 @@
-package com.example.customworkouts;
+package com.example.customworkouts.fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -8,24 +8,23 @@ import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.Chronometer;
 import android.widget.EditText;
-import android.widget.NumberPicker;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentManager;
+
+import com.example.customworkouts.MainActivity;
+import com.example.customworkouts.R;
+import com.example.customworkouts.Utils;
+import com.example.customworkouts.Workout;
+import com.example.customworkouts.fragments.HomeFragment;
 
 import java.util.ArrayList;
 

@@ -1,8 +1,7 @@
-package com.example.customworkouts;
+package com.example.customworkouts.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +9,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.customworkouts.R;
+import com.example.customworkouts.Utils;
+import com.example.customworkouts.adapters.ProfileRecyclerViewAdapter;
 
 public class ProfileFragment extends Fragment {
 

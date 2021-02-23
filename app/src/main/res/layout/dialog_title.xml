@@ -10,10 +10,11 @@
     android:paddingBottom="16dp">
 
 <TextView
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:text="Create New Workout"
-android:textAppearance="@style/TextAppearance.AppCompat.Title"
+    android:id="@+id/dialog_title"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Create New Workout"
+    android:textAppearance="@style/TextAppearance.AppCompat.Title"
     android:textColor="@android:color/white" />
 
     </LinearLayout>

@@ -1,4 +1,4 @@
-package com.example.customworkouts;
+package com.example.customworkouts.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +12,12 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.customworkouts.R;
+import com.example.customworkouts.SwipeToDeleteCallBack;
+import com.example.customworkouts.Utils;
+import com.example.customworkouts.WorkoutGroup;
+
 import java.util.ArrayList;
-import java.util.Map;
 
 public class ProfileRecyclerViewAdapter extends RecyclerView.Adapter<ProfileRecyclerViewAdapter.ViewHolder> {
 

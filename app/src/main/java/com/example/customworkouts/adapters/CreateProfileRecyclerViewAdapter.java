@@ -1,6 +1,5 @@
-package com.example.customworkouts;
+package com.example.customworkouts.adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,32 +8,41 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.customworkouts.R;
+import com.example.customworkouts.Workout;
+import com.example.customworkouts.WorkoutGroup;
+
 import java.util.ArrayList;
 
-public class CardProfileRecyclerViewAdapter extends RecyclerView.Adapter<CardProfileRecyclerViewAdapter.ViewHolder> {
+public class CreateProfileRecyclerViewAdapter extends RecyclerView.Adapter<CreateProfileRecyclerViewAdapter.ViewHolder>{
 
     private ArrayList<Workout> workouts;
-    private String name;
-    private Context context;
+    private WorkoutGroup group;
 
-    public void setWorkouts(String n, ArrayList<Workout> w) {
-        name = n;
+    public CreateProfileRecyclerViewAdapter() {
+        group = new WorkoutGroup("");
+    }
+
+    public void setWorkouts(ArrayList<Workout> w) {
         workouts = w;
+        notifyDataSetChanged();
     }
 
 
     @NonNull
     @Override
-    public CardProfileRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.workout_layout, parent, false);
-        view.setBackgroundColor(parent.getResources().getColor(R.color.gray));
-        return new CardProfileRecyclerViewAdapter.ViewHolder(view);
+
+
+        return new CreateProfileRecyclerViewAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CardProfileRecyclerViewAdapter.ViewHolder holder, int position) {
-        context = holder.itemView.getContext();
+    public void onBindViewHolder(@NonNull CreateProfileRecyclerViewAdapter.ViewHolder holder, int position) {
+
+
         Workout w = workouts.get(position);
 
         String exerciseName = w.getExerciseName();
@@ -53,24 +61,45 @@ public class CardProfileRecyclerViewAdapter extends RecyclerView.Adapter<CardPro
         holder.timer.setText(time);
 
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            boolean clicked = false;
+            @Override
+            public void onClick(View v) {
+
+                if (!clicked) {
+                    clicked = true;
+                    v.setBackgroundColor(v.getContext().getResources().getColor(R.color.purple_500));
+                    group.add(w);
+                } else {
+                    clicked = false;
+                    v.setBackgroundColor(v.getContext().getResources().getColor(R.color.black));
+                    group.remove(w);
+                }
+
+            }
+        });
+
+
+
 
     }
+
+    public WorkoutGroup getProfile() {
+        return group;
+    }
+
 
     @Override
     public int getItemCount() {
         return workouts.size();
     }
 
-    public Context getContext() {
-        return context;
-    }
 
-    public void deleteItemAtPosition(int position) {
-        Workout w = workouts.get(position);
-        Utils.getInstance(context).deleteFromProfile(name, w);
-    }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+
+
         private TextView exerciseName, setsXrepetitions, timer;
 
 
@@ -83,7 +112,7 @@ public class CardProfileRecyclerViewAdapter extends RecyclerView.Adapter<CardPro
 
 
         }
+
+
     }
-
-
 }

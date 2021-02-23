@@ -1,29 +1,25 @@
-package com.example.customworkouts;
+package com.example.customworkouts.adapters;
 
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Point;
-import android.opengl.Visibility;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.customworkouts.fragments.HomeFragment;
+import com.example.customworkouts.MainActivity;
+import com.example.customworkouts.R;
+import com.example.customworkouts.Utils;
+import com.example.customworkouts.Workout;
 
 import java.util.ArrayList;
 
