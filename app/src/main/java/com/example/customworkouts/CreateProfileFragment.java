@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,6 +62,7 @@ public class CreateProfileFragment extends DialogFragment {
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 linearLayoutManager.getOrientation());
+        dividerItemDecoration.setDrawable(new ColorDrawable(R.color.white));
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         EditText profileName = view.findViewById(R.id.editProfileName);

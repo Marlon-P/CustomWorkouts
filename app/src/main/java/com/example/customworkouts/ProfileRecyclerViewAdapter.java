@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -41,10 +43,16 @@ public class ProfileRecyclerViewAdapter extends RecyclerView.Adapter<ProfileRecy
         CardProfileRecyclerViewAdapter adapter = new CardProfileRecyclerViewAdapter();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(holder.itemView.getContext());
         WorkoutGroup wg = workoutSet.get(position);
-        adapter.setWorkouts(wg.getWorkouts());
+        adapter.setWorkouts(wg.getName(), wg.getWorkouts());
         holder.profileName.setText(wg.getName());
         holder.cardRecyclerView.setAdapter(adapter);
         holder.cardRecyclerView.setLayoutManager(linearLayoutManager);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(holder.cardRecyclerView.getContext(),
+                linearLayoutManager.getOrientation());
+        holder.cardRecyclerView.addItemDecoration(dividerItemDecoration);
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallBack(adapter, holder.itemView.getContext(), wg.getName()));
+        itemTouchHelper.attachToRecyclerView(holder.cardRecyclerView);
 
     }
 
@@ -68,4 +76,6 @@ public class ProfileRecyclerViewAdapter extends RecyclerView.Adapter<ProfileRecy
 
         }
     }
+
+
 }

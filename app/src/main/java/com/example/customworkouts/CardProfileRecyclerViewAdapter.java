@@ -1,5 +1,6 @@
 package com.example.customworkouts;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,11 @@ import java.util.ArrayList;
 public class CardProfileRecyclerViewAdapter extends RecyclerView.Adapter<CardProfileRecyclerViewAdapter.ViewHolder> {
 
     private ArrayList<Workout> workouts;
+    private String name;
+    private Context context;
 
-    public void setWorkouts(ArrayList<Workout> w) {
+    public void setWorkouts(String n, ArrayList<Workout> w) {
+        name = n;
         workouts = w;
     }
 
@@ -24,12 +28,13 @@ public class CardProfileRecyclerViewAdapter extends RecyclerView.Adapter<CardPro
     public CardProfileRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.workout_layout, parent, false);
-        view.setBackgroundColor(parent.getResources().getColor(R.color.teal_700));
+        view.setBackgroundColor(parent.getResources().getColor(R.color.gray));
         return new CardProfileRecyclerViewAdapter.ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CardProfileRecyclerViewAdapter.ViewHolder holder, int position) {
+        context = holder.itemView.getContext();
         Workout w = workouts.get(position);
 
         String exerciseName = w.getExerciseName();
@@ -47,11 +52,22 @@ public class CardProfileRecyclerViewAdapter extends RecyclerView.Adapter<CardPro
         holder.setsXrepetitions.setText(setsAndReps);
         holder.timer.setText(time);
 
+
+
     }
 
     @Override
     public int getItemCount() {
         return workouts.size();
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void deleteItemAtPosition(int position) {
+        Workout w = workouts.get(position);
+        Utils.getInstance(context).deleteFromProfile(name, w);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -68,4 +84,6 @@ public class CardProfileRecyclerViewAdapter extends RecyclerView.Adapter<CardPro
 
         }
     }
+
+
 }

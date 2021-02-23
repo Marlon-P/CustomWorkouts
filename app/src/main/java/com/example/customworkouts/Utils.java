@@ -203,9 +203,16 @@ public class Utils {
         }
 
         profilesEditor = profiles.edit();
-        profilesEditor.remove(profileName);
-        profilesEditor.putString(profileName, gson.toJson(newProfile));
-        profilesEditor.apply();
+        if (newProfile.getWorkouts().size() > 0) {
+
+            profilesEditor.remove(profileName);
+            profilesEditor.putString(profileName, gson.toJson(newProfile));
+            profilesEditor.apply();
+        } else {
+            profilesEditor.remove(profileName);
+            profilesEditor.apply();
+            MainActivity.fgm.beginTransaction().replace(R.id.fragmentContainer, new ProfileFragment(), "PROFILE").commit();
+        }
 
 
         return true;
@@ -299,7 +306,7 @@ public class Utils {
         for (Map.Entry<String, ?> entry: profiles.getAll().entrySet()) {
             System.out.println(entry.getKey());
             w.add((getProfile(entry.getKey())));
-            System.out.println(w.get(0).toString());
+
         }
 
         return w;

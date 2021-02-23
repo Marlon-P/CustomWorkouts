@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
         createWorkoutFragment.setArguments(bundle);
 
         createWorkoutFragment.show(getFragmentManager(), CreateWorkoutFragment.TAG);
-        //getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new HomeFragment()).commit();
+
 
 
     }
