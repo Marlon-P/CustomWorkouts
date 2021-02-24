@@ -11,39 +11,49 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.customworkouts.R;
 import com.example.customworkouts.Workout;
-import com.example.customworkouts.WorkoutGroup;
 
+import java.security.acl.Group;
 import java.util.ArrayList;
 
-public class CreateProfileRecyclerViewAdapter extends RecyclerView.Adapter<CreateProfileRecyclerViewAdapter.ViewHolder>{
+public class GroupWorkoutsAdapter extends RecyclerView.Adapter<GroupWorkoutsAdapter.ViewHolder> {
+
 
     private ArrayList<Workout> workouts;
-    private WorkoutGroup group;
+    private int color = R.color.black;
 
-    public CreateProfileRecyclerViewAdapter() {
-        group = new WorkoutGroup("");
+
+    public GroupWorkoutsAdapter() {
+        initData();
+    }
+
+
+
+    public void setColor(int color) {
+        this.color = color;
     }
 
     public void setWorkouts(ArrayList<Workout> w) {
         workouts = w;
-        notifyDataSetChanged();
     }
 
+    public void initData() {
+        workouts = new ArrayList<>();
+        workouts.add(new Workout("Test", 1, 1, 1, 1));
+        workouts.add(new Workout("Test", 2, 2, 2, 2));
+    }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public GroupWorkoutsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.workout_layout, parent, false);
 
 
-        return new CreateProfileRecyclerViewAdapter.ViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CreateProfileRecyclerViewAdapter.ViewHolder holder, int position) {
-
-
+    public void onBindViewHolder(@NonNull GroupWorkoutsAdapter.ViewHolder holder, int position) {
         Workout w = workouts.get(position);
 
         String exerciseName = w.getExerciseName();
@@ -61,46 +71,34 @@ public class CreateProfileRecyclerViewAdapter extends RecyclerView.Adapter<Creat
         holder.setsXrepetitions.setText(setsAndReps);
         holder.timer.setText(time);
 
-
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             boolean clicked = false;
+            boolean colorless = true;
+            private int lastColor = color;
             @Override
             public void onClick(View v) {
 
-                if (!clicked) {
+                if (!clicked || lastColor != color) {
                     clicked = true;
-                    v.setBackgroundColor(v.getContext().getResources().getColor(R.color.purple_500));
-                    group.add(w);
+                    lastColor = color;
+                    v.setBackgroundColor(v.getContext().getResources().getColor(color));
+
                 } else {
                     clicked = false;
                     v.setBackgroundColor(v.getContext().getResources().getColor(R.color.black));
-                    group.remove(w);
+
                 }
 
             }
         });
-
-
-
-
     }
-
-    public WorkoutGroup getProfile() {
-        return group;
-    }
-
 
     @Override
     public int getItemCount() {
         return workouts.size();
     }
 
-
-
-
     public class ViewHolder extends RecyclerView.ViewHolder {
-
-
         private TextView exerciseName, setsXrepetitions, timer;
 
 
@@ -111,9 +109,6 @@ public class CreateProfileRecyclerViewAdapter extends RecyclerView.Adapter<Creat
             setsXrepetitions = itemView.findViewById(R.id.repetitions);
             timer = itemView.findViewById(R.id.timer);
 
-
         }
-
-
     }
 }

@@ -8,6 +8,7 @@ public class Workout {
     private String exerciseName;
     private int sets, repetitions, minutes, seconds;
     private boolean showEditDelMenu = false;
+    private int color;
 
     public Workout(String exerciseName, int sets, int repetitions, int minutes, int seconds) {
 
@@ -28,6 +29,7 @@ public class Workout {
         this.seconds = seconds;
         this.groupName = groupName;
     }
+
 
 
     public String getExerciseName() {
@@ -92,5 +94,13 @@ public class Workout {
 
     public void setShowEditDelMenu(boolean showEditDelMenu) {
         this.showEditDelMenu = showEditDelMenu;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 }

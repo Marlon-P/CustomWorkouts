@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.customworkouts.fragments.CreateProfileFragment;
 import com.example.customworkouts.fragments.CreateWorkoutFragment;
+import com.example.customworkouts.fragments.GroupWorkoutsFragment;
 import com.example.customworkouts.fragments.HomeFragment;
 import com.example.customworkouts.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -103,7 +104,8 @@ public class MainActivity extends AppCompatActivity {
                             } else if (item.getTitle().equals("Delete All")) {
                                 deleteAllProfiles(v);
                             } else {
-                                System.out.println("Adding MULTIPLE WORKOUTS");
+                                GroupWorkoutsFragment fragment = new GroupWorkoutsFragment();
+                                fragment.show(getSupportFragmentManager(), GroupWorkoutsFragment.TAG);
 
                             }
                             return true;

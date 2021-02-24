@@ -78,8 +78,7 @@ public class CreateProfileFragment extends DialogFragment {
             public void onClick(DialogInterface dialog, int which) {
                 String name = profileName.getText().toString();
                 if ( Utils.getInstance(context).createProfile(name, adapter.getProfile())) {
-                    MainActivity.fgm.beginTransaction().replace(R.id.fragmentContainer, new ProfileFragment(), "PROFILE").commit();
-                    Toast.makeText(context, "Created new Profile: " + name, Toast.LENGTH_SHORT).show();
+
 
                 } else {
                     Toast.makeText(context, "Couldn't create profile", Toast.LENGTH_SHORT).show();

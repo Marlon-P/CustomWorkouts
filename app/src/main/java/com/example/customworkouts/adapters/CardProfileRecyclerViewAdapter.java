@@ -55,9 +55,6 @@ public class CardProfileRecyclerViewAdapter extends RecyclerView.Adapter<CardPro
         holder.exerciseName.setText(exerciseName);
         holder.setsXrepetitions.setText(setsAndReps);
         holder.timer.setText(time);
-
-
-
     }
 
     @Override

@@ -7,5 +7,7 @@
         android:title="New Profile" />
     <item android:id="@+id/deleteAll"
         android:title="Delete All" />
+    <item android:id="@+id/colorsTest"
+        android:title="Group Workouts" />
 
 </menu>
