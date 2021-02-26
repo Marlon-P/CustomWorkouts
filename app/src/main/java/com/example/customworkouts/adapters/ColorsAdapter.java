@@ -36,6 +36,7 @@ public class ColorsAdapter extends RecyclerView.Adapter<ColorsAdapter.ViewHolder
          colors.add(R.color.purple);
          colors.add(R.color.brown);
          colors.add(R.color.orange);
+         colors.add(R.color.teal_200);
     }
 
     public ColorsAdapter() {
@@ -66,10 +67,10 @@ public class ColorsAdapter extends RecyclerView.Adapter<ColorsAdapter.ViewHolder
                     lastViewTouched = v;
                     //v.setLayoutParams(new RecyclerView.LayoutParams(50,50));
                     //adapter.setColor(color);
-                    Toast.makeText(v.getContext(), "Color is : " + color, Toast.LENGTH_SHORT).show();
+
                 }
                 adapter.setColor(color);
-                Toast.makeText(v.getContext(), "Color is : " + color, Toast.LENGTH_SHORT).show();
+
             }
         });
     }

@@ -103,10 +103,6 @@ public class MainActivity extends AppCompatActivity {
                                 createProfileFragment.show(fgm, CreateProfileFragment.TAG);
                             } else if (item.getTitle().equals("Delete All")) {
                                 deleteAllProfiles(v);
-                            } else {
-                                GroupWorkoutsFragment fragment = new GroupWorkoutsFragment();
-                                fragment.show(getSupportFragmentManager(), GroupWorkoutsFragment.TAG);
-
                             }
                             return true;
                         }

@@ -14,19 +14,21 @@ import com.example.customworkouts.Workout;
 import com.example.customworkouts.WorkoutGroup;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CreateProfileRecyclerViewAdapter extends RecyclerView.Adapter<CreateProfileRecyclerViewAdapter.ViewHolder>{
 
     private ArrayList<Workout> workouts;
-    private WorkoutGroup group;
+    private HashSet<Workout> selectedWorkouts;
 
     public CreateProfileRecyclerViewAdapter() {
-        group = new WorkoutGroup("");
+        selectedWorkouts = new HashSet<Workout>();
     }
+
 
     public void setWorkouts(ArrayList<Workout> w) {
         workouts = w;
-        notifyDataSetChanged();
     }
 
 
@@ -70,11 +72,11 @@ public class CreateProfileRecyclerViewAdapter extends RecyclerView.Adapter<Creat
                 if (!clicked) {
                     clicked = true;
                     v.setBackgroundColor(v.getContext().getResources().getColor(R.color.purple_500));
-                    group.add(w);
+                    selectedWorkouts.add(w);
                 } else {
                     clicked = false;
                     v.setBackgroundColor(v.getContext().getResources().getColor(R.color.black));
-                    group.remove(w);
+                    selectedWorkouts.remove(w);
                 }
 
             }
@@ -85,8 +87,14 @@ public class CreateProfileRecyclerViewAdapter extends RecyclerView.Adapter<Creat
 
     }
 
-    public WorkoutGroup getProfile() {
-        return group;
+    public ArrayList<Workout> getWorkouts() {
+        ArrayList<Workout> workouts = new ArrayList<>();
+
+      for (Workout w : selectedWorkouts) {
+          workouts.add(w);
+      }
+
+        return workouts;
     }
 
 

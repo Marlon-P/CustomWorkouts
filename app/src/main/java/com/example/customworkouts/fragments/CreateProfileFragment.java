@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +23,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.customworkouts.MainActivity;
 import com.example.customworkouts.R;
 import com.example.customworkouts.Utils;
+import com.example.customworkouts.Workout;
 import com.example.customworkouts.adapters.CreateProfileRecyclerViewAdapter;
+import com.google.gson.internal.$Gson$Preconditions;
+
+import java.security.acl.Group;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 public class CreateProfileFragment extends DialogFragment {
 
@@ -49,6 +56,8 @@ public class CreateProfileFragment extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_DEVICE_DEFAULT_DARK);
 
+        AlertDialog dialog;
+
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.create_workout_profile, null);
         View titleView = inflater.inflate(R.layout.dialog_title, null);
@@ -73,16 +82,10 @@ public class CreateProfileFragment extends DialogFragment {
 
         EditText profileName = view.findViewById(R.id.editProfileName);
 
-        builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Next", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String name = profileName.getText().toString();
-                if ( Utils.getInstance(context).createProfile(name, adapter.getProfile())) {
 
-
-                } else {
-                    Toast.makeText(context, "Couldn't create profile", Toast.LENGTH_SHORT).show();
-                }
             }
         });
 
@@ -92,9 +95,40 @@ public class CreateProfileFragment extends DialogFragment {
 
             }
         });
+        dialog =  builder.create();
 
 
-        return builder.create();
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+           @Override
+           public void onShow(DialogInterface dialogInterface) {
+               Button nextBtn = dialog.getButton(Dialog.BUTTON_POSITIVE);
+               nextBtn.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View v) {
+                       String name = profileName.getText().toString();
+                       ArrayList<Workout> workouts = adapter.getWorkouts();
+                       int size = workouts.size();
+                       System.out.println("size: " + size + " name: " + name);
+                       if (name.isEmpty() && size > 0) {
+                           Toast.makeText(getContext(), "Profile Name was left blank", Toast.LENGTH_SHORT).show();
+                       } else if (size <= 0 && !name.isEmpty()) {
+                           Toast.makeText(getContext(), "No workouts selected", Toast.LENGTH_SHORT).show();
+                       } else if (size <= 0 && name.isEmpty()){
+                           Toast.makeText(getContext(), "All fields left blank", Toast.LENGTH_SHORT).show();
+                       } else {
+
+                           GroupWorkoutsFragment fragment = new GroupWorkoutsFragment();
+                           fragment.setProfile(name, workouts);
+                           fragment.show(getChildFragmentManager(), GroupWorkoutsFragment.TAG);
+
+                       }
+                   }
+               });
+            }
+       });
+
+
+        return dialog;
     }
 
 }

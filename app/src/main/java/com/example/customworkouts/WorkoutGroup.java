@@ -5,12 +5,11 @@ import java.util.ArrayList;
 public class WorkoutGroup {
 
     private String name;
-    private String id;
     private ArrayList<Workout> workouts;
+    private int color;
 
     public WorkoutGroup(String name) {
         this.name = name;
-        this.id = id;
         workouts = new ArrayList<>();
     }
 
@@ -45,5 +44,17 @@ public class WorkoutGroup {
     @Override
     public String toString() {
         return name + " size: " + workouts.get(0).getExerciseName();
+    }
+
+    public int getSize() {
+        return workouts.size();
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 }

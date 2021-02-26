@@ -14,17 +14,14 @@ import com.example.customworkouts.Workout;
 
 import java.security.acl.Group;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class GroupWorkoutsAdapter extends RecyclerView.Adapter<GroupWorkoutsAdapter.ViewHolder> {
 
 
     private ArrayList<Workout> workouts;
     private int color = R.color.black;
-
-
-    public GroupWorkoutsAdapter() {
-        initData();
-    }
 
 
 
@@ -36,10 +33,8 @@ public class GroupWorkoutsAdapter extends RecyclerView.Adapter<GroupWorkoutsAdap
         workouts = w;
     }
 
-    public void initData() {
-        workouts = new ArrayList<>();
-        workouts.add(new Workout("Test", 1, 1, 1, 1));
-        workouts.add(new Workout("Test", 2, 2, 2, 2));
+    public ArrayList<Workout> getWorkouts() {
+        return workouts;
     }
 
     @NonNull
@@ -82,10 +77,12 @@ public class GroupWorkoutsAdapter extends RecyclerView.Adapter<GroupWorkoutsAdap
                     clicked = true;
                     lastColor = color;
                     v.setBackgroundColor(v.getContext().getResources().getColor(color));
+                    w.setColor(color);
 
                 } else {
                     clicked = false;
                     v.setBackgroundColor(v.getContext().getResources().getColor(R.color.black));
+                    w.setColor(color);
 
                 }
 

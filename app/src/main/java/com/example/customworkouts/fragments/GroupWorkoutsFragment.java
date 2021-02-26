@@ -2,6 +2,7 @@ package com.example.customworkouts.fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,10 +18,25 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.customworkouts.R;
+import com.example.customworkouts.Workout;
+import com.example.customworkouts.WorkoutGroup;
 import com.example.customworkouts.adapters.ColorsAdapter;
 import com.example.customworkouts.adapters.GroupWorkoutsAdapter;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class GroupWorkoutsFragment extends DialogFragment {
+
+    private ArrayList<Workout> workouts;
+    private String profileName;
+    public static final String TAG = "Group Workouts Fragment";
+
+    public void setProfile(String name, ArrayList<Workout> w) {
+        profileName = name;
+        workouts = w;
+    }
 
     @Nullable
     @Override
@@ -41,7 +57,32 @@ public class GroupWorkoutsFragment extends DialogFragment {
                 ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 
-    public static final String TAG = "Group Workouts Fragment";
+    private ArrayList<WorkoutGroup> createWorkoutGroup() {
+        ArrayList<WorkoutGroup> workoutGroups = new ArrayList<>();
+        HashMap<Integer, WorkoutGroup> colors = new HashMap<>();
+        //group workouts by their colors in a hashmap
+        for (Workout w : workouts) {
+            int c = w.getColor();
+            WorkoutGroup wg = colors.get(c);
+            if (wg == null) {
+                wg = new WorkoutGroup("" + c);
+                wg.add(w);
+                colors.put(c, wg);
+            } else {
+               wg.add(w);
+            }
+        }
+
+
+        //add all groupings to the list
+        for (int d : colors.keySet()) {
+            workoutGroups.add(colors.get(d));
+        }
+
+
+        return workoutGroups;
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -58,6 +99,7 @@ public class GroupWorkoutsFragment extends DialogFragment {
 
         ColorsAdapter colorsAdapter = new ColorsAdapter();
         GroupWorkoutsAdapter groupWorkoutsAdapter = new GroupWorkoutsAdapter();
+        groupWorkoutsAdapter.setWorkouts(workouts);
 
         colorsAdapter.setAdapter(groupWorkoutsAdapter); //need to pass the color selected to the group to change color of the workouts layout
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -72,6 +114,21 @@ public class GroupWorkoutsFragment extends DialogFragment {
         builder.setView(view);
         builder.setCustomTitle(titleView);
 
+        builder.setPositiveButton("Next", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                OrderGroupsFragment fragment = new OrderGroupsFragment();
+                fragment.setWorkoutGroup(createWorkoutGroup());
+                fragment.show(getFragmentManager(), OrderGroupsFragment.TAG);
+            }
+        });
+        builder.setNegativeButton("Back", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
 
         return builder.create();
     }
