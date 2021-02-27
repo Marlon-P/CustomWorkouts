@@ -21,11 +21,11 @@ public class GroupWorkoutsAdapter extends RecyclerView.Adapter<GroupWorkoutsAdap
 
 
     private ArrayList<Workout> workouts;
-    private int color = R.color.black;
+    private String color = "#000000";
 
 
 
-    public void setColor(int color) {
+    public void setColor(String color) {
         this.color = color;
     }
 
@@ -69,20 +69,20 @@ public class GroupWorkoutsAdapter extends RecyclerView.Adapter<GroupWorkoutsAdap
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             boolean clicked = false;
             boolean colorless = true;
-            private int lastColor = color;
+            private String lastColor = color;
             @Override
             public void onClick(View v) {
 
-                if (!clicked || lastColor != color) {
+                if (!clicked || !lastColor.equals(color)) {
                     clicked = true;
                     lastColor = color;
-                    v.setBackgroundColor(v.getContext().getResources().getColor(color));
+                    v.setBackgroundColor(Color.parseColor(color));
                     w.setColor(color);
 
                 } else {
                     clicked = false;
-                    v.setBackgroundColor(v.getContext().getResources().getColor(R.color.black));
-                    w.setColor(color);
+                    v.setBackgroundColor(Color.parseColor("#000000"));
+                    w.setColor("#000000");
 
                 }
 

@@ -6,7 +6,7 @@ public class WorkoutGroup {
 
     private String name;
     private ArrayList<Workout> workouts;
-    private int color;
+    private String color;
 
     public WorkoutGroup(String name) {
         this.name = name;
@@ -43,18 +43,24 @@ public class WorkoutGroup {
 
     @Override
     public String toString() {
-        return name + " size: " + workouts.get(0).getExerciseName();
+
+        String s = "";
+        for (Workout w : workouts) {
+            s += w.toString() + "\n";
+        }
+        return s;
     }
 
     public int getSize() {
         return workouts.size();
     }
 
-    public int getColor() {
+    public String getColor() {
         return color;
     }
 
-    public void setColor(int color) {
+    public void setColor(String color) {
         this.color = color;
     }
+
 }

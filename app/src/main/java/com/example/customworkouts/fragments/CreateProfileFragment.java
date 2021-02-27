@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -117,11 +118,17 @@ public class CreateProfileFragment extends DialogFragment {
                            Toast.makeText(getContext(), "All fields left blank", Toast.LENGTH_SHORT).show();
                        } else {
 
+                           //resets the workout colors to be black (meaning back to unselected) if the user pressed back from the ordergroupsfragment
+                           for (Workout w : workouts) {
+                               w.setColor("#000000");
+                           }
                            GroupWorkoutsFragment fragment = new GroupWorkoutsFragment();
                            fragment.setProfile(name, workouts);
-                           fragment.show(getChildFragmentManager(), GroupWorkoutsFragment.TAG);
+                           fragment.show(getFragmentManager(), GroupWorkoutsFragment.TAG);
+
 
                        }
+
                    }
                });
             }

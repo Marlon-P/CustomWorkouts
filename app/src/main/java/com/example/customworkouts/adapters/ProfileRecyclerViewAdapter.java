@@ -55,8 +55,7 @@ public class ProfileRecyclerViewAdapter extends RecyclerView.Adapter<ProfileRecy
                 linearLayoutManager.getOrientation());
         holder.cardRecyclerView.addItemDecoration(dividerItemDecoration);
 
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallBack(adapter, holder.itemView.getContext(), wg.getName()));
-        itemTouchHelper.attachToRecyclerView(holder.cardRecyclerView);
+
 
     }
 

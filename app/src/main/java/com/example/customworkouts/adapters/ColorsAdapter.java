@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class ColorsAdapter extends RecyclerView.Adapter<ColorsAdapter.ViewHolder> {
 
 
-    private ArrayList<Integer> colors;
+    private ArrayList<String> colors;
     private View lastViewTouched;
     private GroupWorkoutsAdapter adapter;
 
@@ -29,14 +29,16 @@ public class ColorsAdapter extends RecyclerView.Adapter<ColorsAdapter.ViewHolder
     public void initData() {
         colors = new ArrayList<>();
 
-         colors.add(R.color.red);
-         colors.add(R.color.green);
-         colors.add(R.color.blue);
-         colors.add(R.color.yellow);
-         colors.add(R.color.purple);
-         colors.add(R.color.brown);
-         colors.add(R.color.orange);
-         colors.add(R.color.teal_200);
+        colors.add("#FF0000");
+        colors.add("#008000");
+        colors.add("#0000FF");
+        colors.add("#dccd00");
+        colors.add("#6600CC");
+        colors.add("#FF6600");
+        colors.add("#663300");
+        colors.add("#00FFFF");
+
+
     }
 
     public ColorsAdapter() {
@@ -55,8 +57,8 @@ public class ColorsAdapter extends RecyclerView.Adapter<ColorsAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ColorsAdapter.ViewHolder holder, int position) {
 
-        int color = colors.get(position);
-        holder.colorCircle.setColorFilter(holder.itemView.getContext().getResources().getColor(color));
+        String color = colors.get(position);
+        holder.colorCircle.setColorFilter(Color.parseColor(color));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

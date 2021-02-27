@@ -1,5 +1,7 @@
 package com.example.customworkouts;
 
+import androidx.annotation.NonNull;
+
 import java.util.Objects;
 
 public class Workout {
@@ -8,10 +10,11 @@ public class Workout {
     private String exerciseName;
     private int sets, repetitions, minutes, seconds;
     private boolean showEditDelMenu = false;
-    private int color;
+    private String color;
 
     public Workout(String exerciseName, int sets, int repetitions, int minutes, int seconds) {
 
+        this.color = "#000000";
         this.exerciseName = exerciseName;
         this.sets = sets;
         this.repetitions = repetitions;
@@ -21,7 +24,7 @@ public class Workout {
     }
 
     public Workout(String exerciseName, int sets, int repetitions, int minutes, int seconds, String groupName) {
-
+        this.color = "#000000";
         this.exerciseName = exerciseName;
         this.sets = sets;
         this.repetitions = repetitions;
@@ -88,19 +91,18 @@ public class Workout {
         this.sets = sets;
     }
 
-    public boolean isShowEditDelMenu() {
-        return showEditDelMenu;
-    }
 
-    public void setShowEditDelMenu(boolean showEditDelMenu) {
-        this.showEditDelMenu = showEditDelMenu;
-    }
-
-    public int getColor() {
+    public String getColor() {
         return color;
     }
 
-    public void setColor(int color) {
+    public void setColor(String color) {
         this.color = color;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return exerciseName + " " + sets + "x" + repetitions;
     }
 }

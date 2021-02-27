@@ -12,25 +12,28 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.customworkouts.adapters.CardProfileRecyclerViewAdapter;
+import com.example.customworkouts.adapters.WorkoutGroupRecyclerViewAdapter;
+import com.example.customworkouts.fragments.OrderIndividualGroupFragment;
 
 import java.util.ArrayList;
 
 public class SwipeToDeleteCallBack extends ItemTouchHelper.SimpleCallback {
 
-    private CardProfileRecyclerViewAdapter mAdapter;
+    private WorkoutGroupRecyclerViewAdapter mAdapter;
     private Drawable icon;
     private final ColorDrawable background;
     private Context context;
-    private String profileName;
+    private RecyclerView recyclerView;
 
-    public SwipeToDeleteCallBack(CardProfileRecyclerViewAdapter adapter, Context c, String n) {
+    public SwipeToDeleteCallBack(WorkoutGroupRecyclerViewAdapter adapter, Context c, RecyclerView rv) {
         super(0, ItemTouchHelper.LEFT );
-        profileName = n;
+        recyclerView = rv;
         context = c;
         mAdapter = adapter;
-        icon = c.getDrawable(R.drawable.ic_delete);
-        background = new ColorDrawable(Color.RED);
+        icon = c.getDrawable(R.drawable.ic_edit);
+        background = new ColorDrawable(Color.BLACK);
     }
+
 
     @Override
     public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
@@ -89,13 +92,17 @@ public class SwipeToDeleteCallBack extends ItemTouchHelper.SimpleCallback {
     @Override
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
         int position = viewHolder.getAdapterPosition();
-        mAdapter.deleteItemAtPosition(position);
-        WorkoutGroup wg = Utils.getInstance(context).getProfile(profileName);
+        recyclerView.getAdapter().notifyItemChanged(position);
+        OrderIndividualGroupFragment fragment = new OrderIndividualGroupFragment();
+        fragment.setAdapter(mAdapter);
+//        mAdapter.deleteItemAtPosition(position);
+//        WorkoutGroup wg = Utils.getInstance(context).getProfile(profileName);
+//
+//        if (wg != null) {
+//            ArrayList<Workout> workouts = wg.getWorkouts();
+//            mAdapter.setWorkouts(profileName, workouts);
+//            mAdapter.notifyDataSetChanged();
+//        }
 
-        if (wg != null) {
-            ArrayList<Workout> workouts = wg.getWorkouts();
-            mAdapter.setWorkouts(profileName, workouts);
-            mAdapter.notifyDataSetChanged();
-        }
     }
 }

@@ -58,24 +58,31 @@ public class GroupWorkoutsFragment extends DialogFragment {
     }
 
     private ArrayList<WorkoutGroup> createWorkoutGroup() {
+        System.out.println("CREATING WORKOUTGROUP");
         ArrayList<WorkoutGroup> workoutGroups = new ArrayList<>();
-        HashMap<Integer, WorkoutGroup> colors = new HashMap<>();
+        HashMap<String, WorkoutGroup> colors = new HashMap<>();
         //group workouts by their colors in a hashmap
         for (Workout w : workouts) {
-            int c = w.getColor();
-            WorkoutGroup wg = colors.get(c);
-            if (wg == null) {
-                wg = new WorkoutGroup("" + c);
+            String c = w.getColor();
+            if (c.equals("#000000")) {//for the individual workouts that were not grouped
+                WorkoutGroup wg = new WorkoutGroup("single");
                 wg.add(w);
-                colors.put(c, wg);
+                workoutGroups.add(wg);
             } else {
-               wg.add(w);
+                WorkoutGroup wg = colors.get(c);
+                if (wg == null) {
+                    wg = new WorkoutGroup("" + c);
+                    wg.add(w);
+                    colors.put(c, wg);
+                } else {
+                    wg.add(w);
+                }
             }
         }
 
 
         //add all groupings to the list
-        for (int d : colors.keySet()) {
+        for (String d : colors.keySet()) {
             workoutGroups.add(colors.get(d));
         }
 
@@ -97,6 +104,7 @@ public class GroupWorkoutsFragment extends DialogFragment {
         RecyclerView colorsRecView = view.findViewById(R.id.colorsRecyclerView);
         RecyclerView workoutGroupRecView = view.findViewById(R.id.groupWorkoutsRecyclerView);
 
+        //TODO Add scroll bar to color recycler view
         ColorsAdapter colorsAdapter = new ColorsAdapter();
         GroupWorkoutsAdapter groupWorkoutsAdapter = new GroupWorkoutsAdapter();
         groupWorkoutsAdapter.setWorkouts(workouts);
@@ -117,7 +125,6 @@ public class GroupWorkoutsFragment extends DialogFragment {
         builder.setPositiveButton("Next", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
                 OrderGroupsFragment fragment = new OrderGroupsFragment();
                 fragment.setWorkoutGroup(createWorkoutGroup());
                 fragment.show(getFragmentManager(), OrderGroupsFragment.TAG);

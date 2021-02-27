@@ -29,13 +29,13 @@ public class HomeFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        System.out.println("CREATING FRAGMENT");
+
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        System.out.println("INFLATING FRAGMENT");
+
         View view = inflater.inflate(R.layout.workout_container_fragment, container, false);
 
 
