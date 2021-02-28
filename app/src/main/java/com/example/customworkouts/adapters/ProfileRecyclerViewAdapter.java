@@ -12,19 +12,21 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.customworkouts.Profile;
 import com.example.customworkouts.R;
 import com.example.customworkouts.SwipeToDeleteCallBack;
 import com.example.customworkouts.Utils;
+import com.example.customworkouts.Workout;
 import com.example.customworkouts.WorkoutGroup;
 
 import java.util.ArrayList;
 
 public class ProfileRecyclerViewAdapter extends RecyclerView.Adapter<ProfileRecyclerViewAdapter.ViewHolder> {
 
-    private ArrayList<WorkoutGroup> workoutSet;
+    private ArrayList<Profile> workoutSet;
     private Utils profileUtils;
 
-    public void setWorkouts( ArrayList<WorkoutGroup> workouts) {
+    public void setWorkouts( ArrayList<Profile> workouts) {
         this.workoutSet = workouts;
     }
 
@@ -46,9 +48,12 @@ public class ProfileRecyclerViewAdapter extends RecyclerView.Adapter<ProfileRecy
 
         CardProfileRecyclerViewAdapter adapter = new CardProfileRecyclerViewAdapter();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(holder.itemView.getContext());
-        WorkoutGroup wg = workoutSet.get(position);
-        adapter.setWorkouts(wg.getName(), wg.getWorkouts());
-        holder.profileName.setText(wg.getName());
+        Profile p = workoutSet.get(position);
+
+        ArrayList<Workout> wg =p.getAllWorkouts();
+
+        adapter.setWorkouts(p.getProfileName(), wg);
+        holder.profileName.setText(p.getProfileName());
         holder.cardRecyclerView.setAdapter(adapter);
         holder.cardRecyclerView.setLayoutManager(linearLayoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(holder.cardRecyclerView.getContext(),
@@ -58,6 +63,7 @@ public class ProfileRecyclerViewAdapter extends RecyclerView.Adapter<ProfileRecy
 
 
     }
+
 
     @Override
     public int getItemCount() {

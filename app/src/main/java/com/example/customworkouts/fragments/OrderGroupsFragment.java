@@ -11,17 +11,25 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentResultListener;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.customworkouts.MainActivity;
 import com.example.customworkouts.R;
+import com.example.customworkouts.Utils;
+import com.example.customworkouts.Workout;
 import com.example.customworkouts.WorkoutGroup;
 import com.example.customworkouts.adapters.OrderGroupsAdapter;
 import com.example.customworkouts.adapters.WorkoutGroupRecyclerViewAdapter;
@@ -30,12 +38,17 @@ import java.util.ArrayList;
 
 public class OrderGroupsFragment extends DialogFragment {
 
-    private ArrayList<WorkoutGroup> workoutGroup;
+    private ArrayList<WorkoutGroup> workoutGroups;
     public static final String TAG = "ORDER GROUP FRAGMENT";
+    private OrderGroupsAdapter adapter = new OrderGroupsAdapter();
+    private String profileName;
 
-    public void setWorkoutGroup(ArrayList<WorkoutGroup> wg) {
-        workoutGroup = wg;
+
+    public void setWorkoutGroup(String name, ArrayList<WorkoutGroup> wg) {
+        profileName = name;
+        workoutGroups = wg;
     }
+
 
     @NonNull
     @Override
@@ -48,8 +61,8 @@ public class OrderGroupsFragment extends DialogFragment {
         TextView title = titleView.findViewById(R.id.dialog_title);
         title.setText("Order Workouts");
 
-        OrderGroupsAdapter adapter = new OrderGroupsAdapter();
-        adapter.setGroups(workoutGroup);
+
+        adapter.setGroups(workoutGroups);
 
         RecyclerView allWg = view.findViewById(R.id.orderGroupsRecyclerView);
         allWg.setAdapter(adapter);
@@ -73,7 +86,7 @@ public class OrderGroupsFragment extends DialogFragment {
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder dragged, @NonNull RecyclerView.ViewHolder target) {
                 int d_pos = dragged.getAdapterPosition();
                 int t_pos = target.getAdapterPosition();
-                System.out.println("moving");
+
                 adapter.swap(d_pos, t_pos);
 
                 return true;
@@ -150,9 +163,16 @@ public class OrderGroupsFragment extends DialogFragment {
                 WorkoutGroupRecyclerViewAdapter wgAdapter = new WorkoutGroupRecyclerViewAdapter();
                 wgAdapter.setGroup(adapter.getGroups().get(position));
 
+
+                Bundle bundle = new Bundle();
+                bundle.putInt("position", position);
+
                 OrderIndividualGroupFragment fragment = new OrderIndividualGroupFragment();
+                fragment.setArguments(bundle);
                 fragment.setAdapter(wgAdapter);
-                fragment.show(getFragmentManager(), OrderIndividualGroupFragment.TAG);
+                fragment.show(getParentFragmentManager(), OrderIndividualGroupFragment.TAG);
+
+
 
 
 
@@ -169,6 +189,9 @@ public class OrderGroupsFragment extends DialogFragment {
                 for (WorkoutGroup wg : adapter.getGroups()) {
                     System.out.println(wg);
                 }
+                Utils.getInstance(getContext()).createProfile(profileName, adapter.getGroups());
+                MainActivity.dismissAllDialogs(getParentFragmentManager());
+                MainActivity.fgm.beginTransaction().replace(R.id.fragmentContainer, new ProfileFragment(), "PROFILE").commit();
             }
         });
 
@@ -182,5 +205,10 @@ public class OrderGroupsFragment extends DialogFragment {
 
 
         return builder.create();
+    }
+
+    public void setWorkoutGroup(int pos, WorkoutGroup wg) {
+        adapter.getGroups().set(pos, wg);
+        adapter.notifyItemChanged(pos);
     }
 }

@@ -64,11 +64,10 @@ public class ColorsAdapter extends RecyclerView.Adapter<ColorsAdapter.ViewHolder
             public void onClick(View v) {
                 if (lastViewTouched != v) {
                     if (lastViewTouched != null) {
-                        //lastViewTouched.setLayoutParams(new RecyclerView.LayoutParams(30,30));
+
                     }
                     lastViewTouched = v;
-                    //v.setLayoutParams(new RecyclerView.LayoutParams(50,50));
-                    //adapter.setColor(color);
+
 
                 }
                 adapter.setColor(color);

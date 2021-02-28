@@ -1,10 +1,13 @@
 package com.example.customworkouts;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 
 import java.util.Objects;
 
-public class Workout {
+public class Workout implements Parcelable {
 
     public String groupName;
     private String exerciseName;
@@ -34,6 +37,28 @@ public class Workout {
     }
 
 
+    protected Workout(Parcel in) {
+        groupName = in.readString();
+        exerciseName = in.readString();
+        sets = in.readInt();
+        repetitions = in.readInt();
+        minutes = in.readInt();
+        seconds = in.readInt();
+        showEditDelMenu = in.readByte() != 0;
+        color = in.readString();
+    }
+
+    public static final Creator<Workout> CREATOR = new Creator<Workout>() {
+        @Override
+        public Workout createFromParcel(Parcel in) {
+            return new Workout(in);
+        }
+
+        @Override
+        public Workout[] newArray(int size) {
+            return new Workout[size];
+        }
+    };
 
     public String getExerciseName() {
         return exerciseName;
@@ -104,5 +129,22 @@ public class Workout {
     @Override
     public String toString() {
         return exerciseName + " " + sets + "x" + repetitions;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(groupName);
+        dest.writeString(exerciseName);
+        dest.writeInt(sets);
+        dest.writeInt(repetitions);
+        dest.writeInt(minutes);
+        dest.writeInt(seconds);
+        dest.writeByte((byte) (showEditDelMenu ? 1 : 0));
+        dest.writeString(color);
     }
 }

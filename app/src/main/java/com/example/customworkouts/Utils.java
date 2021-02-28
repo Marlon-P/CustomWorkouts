@@ -182,32 +182,33 @@ public class Utils {
         return workoutArrayList;
     }
 
-    public boolean createProfile(String profileName, WorkoutGroup w) {
+    public boolean createProfile(String profileName, ArrayList<WorkoutGroup> w) {
 
-        WorkoutGroup wList = getProfile(profileName);
+        Profile wList = getProfile(profileName);
 
         if (wList != null) {
             return false;
         }
 
-        w.setName(profileName);
+        Profile p = new Profile(profileName, w);
+
         profilesEditor = profiles.edit();
-        profilesEditor.putString(profileName, gson.toJson(w));
+        profilesEditor.putString(profileName, gson.toJson(p));
         profilesEditor.apply();
 
 
         return true;
     }
 
-    public boolean updateProfile(String profileName, WorkoutGroup newProfile) {
-        WorkoutGroup wList = getProfile(profileName);
+    public boolean updateProfile(String profileName, Profile newProfile) {
+        Profile wList = getProfile(profileName);
 
         if (wList == null) {
             return false;
         }
 
         profilesEditor = profiles.edit();
-        if (newProfile.getWorkouts().size() > 0) {
+        if (newProfile != null) {
 
             profilesEditor.remove(profileName);
             profilesEditor.putString(profileName, gson.toJson(newProfile));
@@ -222,38 +223,16 @@ public class Utils {
         return true;
     }
 
-    public WorkoutGroup getProfile(String profileName) {
-        Type type = new TypeToken<WorkoutGroup>(){}.getType();
+    public Profile getProfile(String profileName) {
+        Type type = new TypeToken<Profile>(){}.getType();
         return gson.fromJson(profiles.getString(profileName, null), type);
     }
 
-    public boolean addToProfile(String profileName, Workout w) {
-        WorkoutGroup wList = getProfile(profileName);
 
-        if (wList == null) {
-            return false;
-        }
 
-        wList.add(w);
-        updateProfile(profileName, wList);
-        return true;
-    }
-
-    public boolean deleteFromProfile(String profileName, Workout w) {
-        WorkoutGroup wList = getProfile(profileName);
-
-        if (wList == null) {
-            return false;
-        }
-
-        wList.remove(w);
-        updateProfile(profileName, wList);
-
-        return true;
-    }
 
     public boolean deleteProfile(String profileName) {
-        WorkoutGroup wList = getProfile(profileName);
+        Profile wList = getProfile(profileName);
 
         //if list is null then that means list with the key of "profileName" does not exist
         if (wList == null) {
@@ -304,8 +283,8 @@ public class Utils {
         updateWorkoutsList();
     }
 
-    public ArrayList<WorkoutGroup> getProfiles() {
-        ArrayList<WorkoutGroup> w = new ArrayList<>();
+    public ArrayList<Profile> getProfiles() {
+       ArrayList<Profile> w = new ArrayList<>();
 
         for (Map.Entry<String, ?> entry: profiles.getAll().entrySet()) {
             System.out.println(entry.getKey());

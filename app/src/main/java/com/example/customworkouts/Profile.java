@@ -8,9 +8,11 @@ public class Profile {
     * will go off and then alternate between the workouts until the sets reach 0 and and the timer goes off then play the timer
     * for the next workouts group in the groups list*/
     private ArrayList<WorkoutGroup> groups;
+    private String profileName;
 
-    public Profile() {
-
+    public Profile(String name, ArrayList<WorkoutGroup> wgs) {
+        groups = wgs;
+        profileName = name;
     }
 
 
@@ -28,5 +30,25 @@ public class Profile {
 
     public void remove(WorkoutGroup wg) {
         groups.remove(wg);
+    }
+
+    public String getProfileName() {
+        return profileName;
+    }
+
+    public void setProfileName(String profileName) {
+        this.profileName = profileName;
+    }
+
+    public ArrayList<Workout> getAllWorkouts() {
+        ArrayList<Workout> workouts = new ArrayList<>();
+
+        for (WorkoutGroup wg : groups) {
+            for (Workout w : wg.getWorkouts()) {
+                workouts.add(w);
+            }
+        }
+
+        return workouts;
     }
 }

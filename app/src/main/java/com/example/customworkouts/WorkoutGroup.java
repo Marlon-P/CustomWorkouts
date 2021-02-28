@@ -1,8 +1,11 @@
 package com.example.customworkouts;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 
-public class WorkoutGroup {
+public class WorkoutGroup implements Parcelable {
 
     private String name;
     private ArrayList<Workout> workouts;
@@ -14,6 +17,23 @@ public class WorkoutGroup {
     }
 
 
+    protected WorkoutGroup(Parcel in) {
+        name = in.readString();
+        workouts = in.createTypedArrayList(Workout.CREATOR);
+        color = in.readString();
+    }
+
+    public static final Creator<WorkoutGroup> CREATOR = new Creator<WorkoutGroup>() {
+        @Override
+        public WorkoutGroup createFromParcel(Parcel in) {
+            return new WorkoutGroup(in);
+        }
+
+        @Override
+        public WorkoutGroup[] newArray(int size) {
+            return new WorkoutGroup[size];
+        }
+    };
 
     public void add(Workout w) {
         workouts.add(w);
@@ -63,4 +83,15 @@ public class WorkoutGroup {
         this.color = color;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeTypedList(workouts);
+        dest.writeString(color);
+    }
 }

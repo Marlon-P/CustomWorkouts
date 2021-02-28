@@ -70,6 +70,7 @@ public class OrderIndividualGroupFragment extends DialogFragment {
 
                 adapter.swap(d_pos, t_pos);
                 adapter.notifyItemMoved(d_pos, t_pos);
+
                 return true;
             }
 
@@ -87,6 +88,11 @@ public class OrderIndividualGroupFragment extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
+
+                OrderGroupsFragment f = (OrderGroupsFragment) getParentFragmentManager().findFragmentByTag(OrderGroupsFragment.TAG);
+                Bundle d = getArguments();
+                f.setWorkoutGroup(d.getInt("position"), adapter.getGroup());
+
             }
         });
 
@@ -99,5 +105,9 @@ public class OrderIndividualGroupFragment extends DialogFragment {
 
 
         return builder.create();
+    }
+
+    public WorkoutGroup getGroup() {
+        return adapter.getGroup();
     }
 }

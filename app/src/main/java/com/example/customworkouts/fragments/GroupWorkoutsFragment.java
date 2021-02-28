@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -94,7 +95,7 @@ public class GroupWorkoutsFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_DEVICE_DEFAULT_DARK);
-
+        AlertDialog dialog;
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.group_workouts_layout, null);
         View titleView = inflater.inflate(R.layout.dialog_title, null);
@@ -125,9 +126,7 @@ public class GroupWorkoutsFragment extends DialogFragment {
         builder.setPositiveButton("Next", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                OrderGroupsFragment fragment = new OrderGroupsFragment();
-                fragment.setWorkoutGroup(createWorkoutGroup());
-                fragment.show(getFragmentManager(), OrderGroupsFragment.TAG);
+
             }
         });
         builder.setNegativeButton("Back", new DialogInterface.OnClickListener() {
@@ -137,6 +136,24 @@ public class GroupWorkoutsFragment extends DialogFragment {
             }
         });
 
-        return builder.create();
+
+
+        dialog = builder.create();
+
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                Button btn = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        OrderGroupsFragment fragment = new OrderGroupsFragment();
+                        fragment.setWorkoutGroup(profileName, createWorkoutGroup());
+                        fragment.show(getParentFragmentManager(), OrderGroupsFragment.TAG);
+                    }
+                });
+            }
+        });
+        return dialog;
     }
 }

@@ -30,7 +30,9 @@ public class WorkoutGroupRecyclerViewAdapter extends RecyclerView.Adapter<Workou
     }
 
     public void swap(int from, int to) {
+
         Collections.swap(group.getWorkouts(), from, to);
+
     }
 
     @NonNull
@@ -82,4 +84,6 @@ public class WorkoutGroupRecyclerViewAdapter extends RecyclerView.Adapter<Workou
 
         }
     }
+
+
 }

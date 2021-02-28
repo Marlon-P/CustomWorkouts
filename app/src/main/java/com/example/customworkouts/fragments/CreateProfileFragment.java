@@ -124,7 +124,7 @@ public class CreateProfileFragment extends DialogFragment {
                            }
                            GroupWorkoutsFragment fragment = new GroupWorkoutsFragment();
                            fragment.setProfile(name, workouts);
-                           fragment.show(getFragmentManager(), GroupWorkoutsFragment.TAG);
+                           fragment.show(getParentFragmentManager(), GroupWorkoutsFragment.TAG);
 
 
                        }

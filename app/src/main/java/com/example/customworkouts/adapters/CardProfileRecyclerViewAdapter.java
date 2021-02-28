@@ -66,10 +66,7 @@ public class CardProfileRecyclerViewAdapter extends RecyclerView.Adapter<CardPro
         return context;
     }
 
-    public void deleteItemAtPosition(int position) {
-        Workout w = workouts.get(position);
-        Utils.getInstance(context).deleteFromProfile(name, w);
-    }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView exerciseName, setsXrepetitions, timer;
