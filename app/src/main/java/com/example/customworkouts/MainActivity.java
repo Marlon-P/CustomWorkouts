@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private ProfileFragment profileFragment;
     private String currentFragment = "HOME";
     public static FragmentManager fgm;
+    boolean populated = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +61,8 @@ public class MainActivity extends AppCompatActivity {
                     currentFragment = "HOME";
                     fgm.beginTransaction().replace(R.id.fragmentContainer, homeFragment,"HOME").commit();
                 } else {
-                    Utils.getInstance(MainActivity.this).populate();
-                    fgm.beginTransaction().replace(R.id.fragmentContainer, new HomeFragment(),"HOME").commit();
+                        Utils.getInstance(MainActivity.this).populate();
+                        fgm.beginTransaction().replace(R.id.fragmentContainer, new HomeFragment(),"HOME").commit();
                 }
 
                 return true;
@@ -89,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
                             } else if (item.getTitle().equals("Add a Workout")) {
                                 addWorkout(v);
                             } else {
-                                System.out.println("Adding MULTIPLE WORKOUTS");
                                 addMultiWorkouts(v);
                             }
                             return true;
