@@ -27,6 +27,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+
         View profilesPageView = inflater.inflate(R.layout.profile_container_fragment, container, false);
 
         profileUtils = Utils.getInstance(context, profileAdapter);

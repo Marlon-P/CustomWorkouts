@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.customworkouts.MainActivity;
+import com.example.customworkouts.Profile;
 import com.example.customworkouts.R;
 import com.example.customworkouts.Utils;
 import com.example.customworkouts.Workout;
@@ -183,17 +184,31 @@ public class OrderGroupsFragment extends DialogFragment {
         builder.setView(view);
         builder.setCustomTitle(titleView);
 
-        builder.setPositiveButton("Create Profile", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                for (WorkoutGroup wg : adapter.getGroups()) {
-                    System.out.println(wg);
+        Bundle b = getArguments();
+        boolean edit = b.getBoolean("edit");
+        String newName = b.getString("profileName");
+        if (edit) {
+            builder.setPositiveButton("Finish Editing", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    Profile p = new Profile(newName, adapter.getGroups());
+                    Utils.getInstance(getContext()).updateProfile(profileName, newName, p);
+                    MainActivity.dismissAllDialogs(getParentFragmentManager());
+                    MainActivity.fgm.beginTransaction().replace(R.id.fragmentContainer, new ProfileFragment(), "PROFILE").commit();
                 }
-                Utils.getInstance(getContext()).createProfile(profileName, adapter.getGroups());
-                MainActivity.dismissAllDialogs(getParentFragmentManager());
-                MainActivity.fgm.beginTransaction().replace(R.id.fragmentContainer, new ProfileFragment(), "PROFILE").commit();
-            }
-        });
+            });
+        } else {
+            builder.setPositiveButton("Create Profile", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    Utils.getInstance(getContext()).createProfile(profileName, adapter.getGroups());
+                    MainActivity.dismissAllDialogs(getParentFragmentManager());
+                    MainActivity.fgm.beginTransaction().replace(R.id.fragmentContainer, new ProfileFragment(), "PROFILE").commit();
+                }
+            });
+        }
 
         builder.setNegativeButton("Back", new DialogInterface.OnClickListener() {
             @Override

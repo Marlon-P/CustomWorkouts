@@ -58,39 +58,6 @@ public class GroupWorkoutsFragment extends DialogFragment {
                 ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 
-    private ArrayList<WorkoutGroup> createWorkoutGroup() {
-        System.out.println("CREATING WORKOUTGROUP");
-        ArrayList<WorkoutGroup> workoutGroups = new ArrayList<>();
-        HashMap<String, WorkoutGroup> colors = new HashMap<>();
-        //group workouts by their colors in a hashmap
-        for (Workout w : workouts) {
-            String c = w.getColor();
-            if (c.equals("#000000")) {//for the individual workouts that were not grouped
-                WorkoutGroup wg = new WorkoutGroup("single");
-                wg.add(w);
-                workoutGroups.add(wg);
-            } else {
-                WorkoutGroup wg = colors.get(c);
-                if (wg == null) {
-                    wg = new WorkoutGroup("" + c);
-                    wg.add(w);
-                    colors.put(c, wg);
-                } else {
-                    wg.add(w);
-                }
-            }
-        }
-
-
-        //add all groupings to the list
-        for (String d : colors.keySet()) {
-            workoutGroups.add(colors.get(d));
-        }
-
-
-        return workoutGroups;
-    }
-
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -147,8 +114,12 @@ public class GroupWorkoutsFragment extends DialogFragment {
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Bundle args = new Bundle();
+                        args.putBoolean("edit", false);
+                        args.putString("profileName", profileName);
                         OrderGroupsFragment fragment = new OrderGroupsFragment();
-                        fragment.setWorkoutGroup(profileName, createWorkoutGroup());
+                        fragment.setArguments(args);
+                        fragment.setWorkoutGroup(profileName, groupWorkoutsAdapter.createWorkoutGroups());
                         fragment.show(getParentFragmentManager(), OrderGroupsFragment.TAG);
                     }
                 });

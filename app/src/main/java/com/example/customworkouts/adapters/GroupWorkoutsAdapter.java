@@ -1,5 +1,7 @@
 package com.example.customworkouts.adapters;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +13,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.customworkouts.R;
 import com.example.customworkouts.Workout;
+import com.example.customworkouts.WorkoutGroup;
 
 import java.security.acl.Group;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,6 +35,7 @@ public class GroupWorkoutsAdapter extends RecyclerView.Adapter<GroupWorkoutsAdap
 
     public void setWorkouts(ArrayList<Workout> w) {
         workouts = w;
+        notifyDataSetChanged();
     }
 
     public ArrayList<Workout> getWorkouts() {
@@ -68,7 +73,7 @@ public class GroupWorkoutsAdapter extends RecyclerView.Adapter<GroupWorkoutsAdap
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             boolean clicked = false;
-            boolean colorless = true;
+
             private String lastColor = color;
             @Override
             public void onClick(View v) {
@@ -90,9 +95,43 @@ public class GroupWorkoutsAdapter extends RecyclerView.Adapter<GroupWorkoutsAdap
         });
     }
 
+
+
     @Override
     public int getItemCount() {
         return workouts.size();
+    }
+
+    public ArrayList<WorkoutGroup> createWorkoutGroups() {
+        ArrayList<WorkoutGroup> workoutGroups = new ArrayList<>();
+        HashMap<String, WorkoutGroup> colors = new HashMap<>();
+        //group workouts by their colors in a hashmap
+        for (Workout w : workouts) {
+            String c = w.getColor();
+            if (c.equals("#000000")) {//for the individual workouts that were not grouped
+                WorkoutGroup wg = new WorkoutGroup("single");
+                wg.add(w);
+                workoutGroups.add(wg);
+            } else {
+                WorkoutGroup wg = colors.get(c);
+                if (wg == null) {
+                    wg = new WorkoutGroup("" + c);
+                    wg.add(w);
+                    colors.put(c, wg);
+                } else {
+                    wg.add(w);
+                }
+            }
+        }
+
+
+        //add all groupings to the list
+        for (String d : colors.keySet()) {
+            workoutGroups.add(colors.get(d));
+        }
+
+
+        return workoutGroups;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

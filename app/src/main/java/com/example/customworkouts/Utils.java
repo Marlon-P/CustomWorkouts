@@ -200,25 +200,17 @@ public class Utils {
         return true;
     }
 
-    public boolean updateProfile(String profileName, Profile newProfile) {
-        Profile wList = getProfile(profileName);
-
+    public boolean updateProfile(String oldName, String newName,  Profile newProfile) {
+        Profile wList = getProfile(oldName);
+        System.out.println("update: " + newName);
         if (wList == null) {
             return false;
         }
 
         profilesEditor = profiles.edit();
-        if (newProfile != null) {
-
-            profilesEditor.remove(profileName);
-            profilesEditor.putString(profileName, gson.toJson(newProfile));
-            profilesEditor.apply();
-        } else {
-            profilesEditor.remove(profileName);
-            profilesEditor.apply();
-            MainActivity.fgm.beginTransaction().replace(R.id.fragmentContainer, new ProfileFragment(), "PROFILE").commit();
-        }
-
+        profilesEditor.remove(oldName);
+        profilesEditor.putString(newName, gson.toJson(newProfile));
+        profilesEditor.apply();
 
         return true;
     }
