@@ -36,16 +36,12 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@id/editProfileColorsRecyclerView"
+        android:id="@+id/editProfileColorsRecView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editProfileNameText">
 
-
     </androidx.recyclerview.widget.RecyclerView>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/editProfileRecyclerView"
         android:layout_width="match_parent"
@@ -53,7 +49,7 @@
         android:paddingBottom="62dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editProfileColorsRecyclerView"
+        app:layout_constraintTop_toBottomOf="@id/editProfileColorsRecView"
         tools:layout_editor_absoluteY="37dp"></androidx.recyclerview.widget.RecyclerView>
 
 

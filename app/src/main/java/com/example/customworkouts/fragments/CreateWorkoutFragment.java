@@ -32,7 +32,7 @@ import java.util.ArrayList;
 public class CreateWorkoutFragment extends DialogFragment {
 
 
-    private EditText exerciseNameText, sets, repetitions, minutes, seconds;
+    private EditText exerciseNameText, sets, repetitions, minutes, seconds, durationMinutes, durationSeconds;
 
 
     private boolean multiAdd = false;
@@ -91,6 +91,9 @@ public class CreateWorkoutFragment extends DialogFragment {
         minutes = view.findViewById(R.id.editTextMinutes);
         seconds = view.findViewById(R.id.editTextSeconds);
 
+        durationMinutes = view.findViewById(R.id.durationMinutes);
+        durationSeconds = view.findViewById(R.id.durationSeconds);
+
         Context context = getContext();
 
         if (multiAdd) {
@@ -140,12 +143,17 @@ public class CreateWorkoutFragment extends DialogFragment {
                             String repsEditText = repetitions.getText().toString();
                             String minsEditText = minutes.getText().toString();
                             String secondsEditText = seconds.getText().toString();
+                            String durationMinEditText = durationMinutes.getText().toString();
+                            String durationSecondsEditText = durationSeconds.getText().toString();
 
                             if (    name.isEmpty()                          ||//form validation
                                     setNumberEditText.isEmpty()             ||
                                     repsEditText.isEmpty()                  ||
                                     minsEditText.isEmpty()                  ||
-                                    secondsEditText.isEmpty()) {
+                                    secondsEditText.isEmpty()               ||
+                                    durationMinEditText.isEmpty()           ||
+                                    durationSecondsEditText.isEmpty()
+                            ){
 
                                 Toast.makeText(context, "Some or all fields were left blank, no workout was created", Toast.LENGTH_LONG).show();
 
@@ -155,8 +163,10 @@ public class CreateWorkoutFragment extends DialogFragment {
                                 int reps = Integer.parseInt(repsEditText);
                                 int mins = Integer.parseInt(minsEditText);
                                 int secs = Integer.parseInt(secondsEditText);
+                                int durMins = Integer.parseInt(durationMinEditText);
+                                int durSecs = Integer.parseInt(durationSecondsEditText);
 
-                                workouts.add(new Workout(name, setNumber, reps, mins, secs));
+                                workouts.add(new Workout(name, setNumber, reps, mins, secs, durMins, durSecs));
                                 Toast.makeText(context, "Added " + name + " to your workouts", Toast.LENGTH_SHORT).show();
 
                                 //clear the edit texts to allow for another entry
@@ -165,6 +175,9 @@ public class CreateWorkoutFragment extends DialogFragment {
                                 repetitions.setText("");
                                 minutes.setText("");
                                 seconds.setText("");
+
+                                durationMinutes.setText("");
+                                durationSeconds.setText("");
 
                             }
                         }
@@ -188,12 +201,17 @@ public class CreateWorkoutFragment extends DialogFragment {
                     String repsEditText = repetitions.getText().toString();
                     String minsEditText = minutes.getText().toString();
                     String secondsEditText = seconds.getText().toString();
+                    String durationMinEditText = durationMinutes.getText().toString();
+                    String durationSecondsEditText = durationSeconds.getText().toString();
 
                     if (    name.isEmpty()                          ||//form validation
                             setNumberEditText.isEmpty()             ||
                             repsEditText.isEmpty()                  ||
                             minsEditText.isEmpty()                  ||
-                            secondsEditText.isEmpty()) {
+                            secondsEditText.isEmpty()               ||
+                            durationMinEditText.isEmpty()           ||
+                            durationSecondsEditText.isEmpty()
+                    ) {
 
                             Toast.makeText(context, "Some or all fields were left blank, no workout was created", Toast.LENGTH_LONG).show();
 
@@ -205,7 +223,10 @@ public class CreateWorkoutFragment extends DialogFragment {
                         int mins = Integer.parseInt(minsEditText);
                         int secs = Integer.parseInt(secondsEditText);
 
-                        Utils.getInstance(context).addWorkout(new Workout(name, setNumber, reps, mins, secs));
+                        int durMins = Integer.parseInt(durationMinEditText);
+                        int durSecs = Integer.parseInt(durationSecondsEditText);
+
+                        Utils.getInstance(context).addWorkout(new Workout(name, setNumber, reps, mins, secs, durMins, durSecs));
                         MainActivity.fgm.beginTransaction().replace(R.id.fragmentContainer, new HomeFragment()).commit();
                         Toast.makeText(context, "Add " + name + " to your workouts list", Toast.LENGTH_SHORT).show();
 

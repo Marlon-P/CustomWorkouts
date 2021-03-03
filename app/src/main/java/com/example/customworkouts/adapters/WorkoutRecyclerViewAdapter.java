@@ -90,7 +90,7 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
                 holder.editButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        EditText exerciseNameText, sets, repetitions, minutes, seconds;
+                        EditText exerciseNameText, sets, repetitions, minutes, seconds, durationMin, durationSec;
                         AlertDialog.Builder builder = new AlertDialog.Builder(context, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
 
 
@@ -107,11 +107,15 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
                         repetitions = view.findViewById(R.id.numberPicker2);
                         minutes = view.findViewById(R.id.editTextMinutes);
                         seconds = view.findViewById(R.id.editTextSeconds);
+                        durationMin = view.findViewById(R.id.durationMinutes);
+                        durationSec = view.findViewById(R.id.durationSeconds);
 
                         exerciseNameText.setText(w.getExerciseName());
                         sets.setText("" + w.getSets());
                         repetitions.setText("" + w.getRepetitions());
                         minutes.setText("" + w.getMinutes());
+                        durationMin.setText("" + w.getWorkoutDurationMinutes());
+                        durationSec.setText("" + w.getWorkoutDurationSeconds());
 
                         int s = w.getSeconds();
                         if (s < 10) {
@@ -130,8 +134,10 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
                                 int reps = Integer.parseInt(repetitions.getText().toString());
                                 int mins = Integer.parseInt(minutes.getText().toString());
                                 int secs = Integer.parseInt(seconds.getText().toString());
+                                int durMin = Integer.parseInt(durationMin.getText().toString());
+                                int durSec = Integer.parseInt(durationSec.getText().toString());
 
-                                utils.editWorkout(position, name, setNumber, reps, mins, secs);
+                                utils.editWorkout(position, name, setNumber, reps, mins, secs, durMin, durSec);
                                 setWorkouts(utils.getWorkoutsList());
                                 holder.edit_delete_option_menu.setVisibility(View.GONE);
                                 MainActivity.fgm.beginTransaction().replace(R.id.fragmentContainer, new HomeFragment()).commit();

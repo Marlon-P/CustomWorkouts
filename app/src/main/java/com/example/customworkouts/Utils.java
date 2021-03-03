@@ -130,27 +130,29 @@ public class Utils {
         }
     }
 
-    public void editWorkout(int pos, String name, int sets, int reps, int minutes, int seconds) {
+    public void editWorkout(int pos, String name, int sets, int reps, int minutes, int seconds, int durMin, int durSec) {
         Workout w = workoutArrayList.get(pos);
         w.setExerciseName(name);
         w.setSets(sets);
         w.setRepetitions(reps);
         w.setMinutes(minutes);
         w.setSeconds(seconds);
+        w.setWorkoutDurationMinutes(durMin);
+        w.setWorkoutDurationSeconds(durSec);
 
         updateWorkoutsList();
         workoutRecyclerViewAdapter.setWorkouts(workoutArrayList);
     }
 
     public void removeWorkout(Workout workout) {
-        Workout removeWorkout = new Workout("", 0,0,0,0);
+        Workout removeWorkout = new Workout("", 0,0,0,0, 0, 0);
 
         for (Workout w : workoutArrayList) {
             if (w.equals(workout)) {
                 removeWorkout = w;
             }
         }
-        if (!removeWorkout.equals(new Workout("", 0,0,0,0)) ) {
+        if (!removeWorkout.equals(new Workout("", 0,0,0,0, 0, 0)) ) {
             workoutArrayList.remove(removeWorkout);
             updateWorkoutsList();
             workoutRecyclerViewAdapter.setWorkouts(workoutArrayList);
@@ -247,17 +249,17 @@ public class Utils {
 
     public void populate() {
 
-        Workout a = new Workout("Pull Ups", 3, 6, 1, 30);
-        Workout b = new Workout("Pistol Squats", 3, 5, 1, 30);
-        Workout c = new Workout("Dips", 3, 15, 1, 30);
-        Workout d = new Workout("Single Leg Deadlift", 3, 12, 1, 30);
-        Workout e = new Workout("Bodyweight Rows", 3, 6, 1, 30);
-        Workout f = new Workout("Handstand Push Ups", 3, 7, 1, 30);
-        Workout g = new Workout("L-sit", 3, 60, 3, 0);
-        Workout h = new Workout("Planche Push Ups", 3, 5, 4, 20);
-        Workout i = new Workout("Archer Pull Ups", 3, 9, 10, 20);
-        Workout j = new Workout("Chin Ups", 3, 8, 1, 30);
-        Workout k = new Workout("Calf Raises", 10, 99, 1, 30);
+        Workout a = new Workout("Pull Ups", 3, 6, 1, 30, 0, 12);
+        Workout b = new Workout("Pistol Squats", 3, 5, 1, 30, 0, 12);
+        Workout c = new Workout("Dips", 3, 15, 1, 30, 0 , 12);
+        Workout d = new Workout("Single Leg Deadlift", 3, 12, 1, 30, 0 , 12);
+        Workout e = new Workout("Bodyweight Rows", 3, 6, 1, 30, 0, 12);
+        Workout f = new Workout("Handstand Push Ups", 3, 7, 1, 30, 0, 12);
+        Workout g = new Workout("L-sit", 3, 60, 3, 0, 0, 12);
+        Workout h = new Workout("Planche Push Ups", 3, 5, 4, 20, 0, 12);
+        Workout i = new Workout("Archer Pull Ups", 3, 9, 10, 20, 0, 12);
+        Workout j = new Workout("Chin Ups", 3, 8, 1, 30, 0, 12);
+        Workout k = new Workout("Calf Raises", 10, 99, 1, 30, 0, 12);
 
         workoutArrayList.add(a);
         workoutArrayList.add(b);

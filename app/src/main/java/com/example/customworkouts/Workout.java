@@ -9,42 +9,33 @@ import java.util.Objects;
 
 public class Workout implements Parcelable {
 
-    public String groupName;
+
     private String exerciseName;
     private int sets, repetitions, minutes, seconds;
-    private boolean showEditDelMenu = false;
+    private int workoutDurationMinutes, workoutDurationSeconds; //the time it takes to perform a full set of an exercise
     private String color;
 
-    public Workout(String exerciseName, int sets, int repetitions, int minutes, int seconds) {
+    public Workout(String exerciseName, int sets, int repetitions, int minutes, int seconds, int durMins, int durSecs) {
 
-        this.color = "#000000";
+        this.color = "#000000";//used to group workouts together, default is black to indicate a workout by itself
         this.exerciseName = exerciseName;
         this.sets = sets;
         this.repetitions = repetitions;
         this.minutes = minutes;
         this.seconds = seconds;
-        groupName = "asdfasdfasdfasdfl;kj;lkj;lkj;lkj";
-    }
+        this.workoutDurationMinutes = durMins;
+        this.workoutDurationSeconds = durSecs;
 
-    public Workout(String exerciseName, int sets, int repetitions, int minutes, int seconds, String groupName) {
-        this.color = "#000000";
-        this.exerciseName = exerciseName;
-        this.sets = sets;
-        this.repetitions = repetitions;
-        this.minutes = minutes;
-        this.seconds = seconds;
-        this.groupName = groupName;
     }
-
 
     protected Workout(Parcel in) {
-        groupName = in.readString();
         exerciseName = in.readString();
         sets = in.readInt();
         repetitions = in.readInt();
         minutes = in.readInt();
         seconds = in.readInt();
-        showEditDelMenu = in.readByte() != 0;
+        workoutDurationMinutes = in.readInt();
+        workoutDurationSeconds = in.readInt();
         color = in.readString();
     }
 
@@ -92,6 +83,22 @@ public class Workout implements Parcelable {
         this.repetitions = repetitions;
     }
 
+    public int getWorkoutDurationMinutes() {
+        return workoutDurationMinutes;
+    }
+
+    public void setWorkoutDurationMinutes(int workoutDurationMinutes) {
+        this.workoutDurationMinutes = workoutDurationMinutes;
+    }
+
+    public int getWorkoutDurationSeconds() {
+        return workoutDurationSeconds;
+    }
+
+    public void setWorkoutDurationSeconds(int workoutDurationSeconds) {
+        this.workoutDurationSeconds = workoutDurationSeconds;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -131,20 +138,38 @@ public class Workout implements Parcelable {
         return exerciseName + " " + sets + "x" + repetitions;
     }
 
+
+    /**
+     * Describe the kinds of special objects contained in this Parcelable
+     * instance's marshaled representation. For example, if the object will
+     * include a file descriptor in the output of {@link #writeToParcel(Parcel, int)},
+     * the return value of this method must include the
+     * {@link #CONTENTS_FILE_DESCRIPTOR} bit.
+     *
+     * @return a bitmask indicating the set of special object types marshaled
+     * by this Parcelable object instance.
+     */
     @Override
     public int describeContents() {
         return 0;
     }
 
+    /**
+     * Flatten this object in to a Parcel.
+     *
+     * @param dest  The Parcel in which the object should be written.
+     * @param flags Additional flags about how the object should be written.
+     *              May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
+     */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(groupName);
         dest.writeString(exerciseName);
         dest.writeInt(sets);
         dest.writeInt(repetitions);
         dest.writeInt(minutes);
         dest.writeInt(seconds);
-        dest.writeByte((byte) (showEditDelMenu ? 1 : 0));
+        dest.writeInt(workoutDurationMinutes);
+        dest.writeInt(workoutDurationSeconds);
         dest.writeString(color);
     }
 }

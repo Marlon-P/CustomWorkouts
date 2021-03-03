@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -32,6 +33,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.customworkouts.MainActivity;
 import com.example.customworkouts.Profile;
 import com.example.customworkouts.R;
+import com.example.customworkouts.StartWorkoutsActivity;
 import com.example.customworkouts.SwipeToDeleteCallBack;
 import com.example.customworkouts.Utils;
 import com.example.customworkouts.Workout;
@@ -56,7 +58,7 @@ public class ProfileRecyclerViewAdapter extends RecyclerView.Adapter<ProfileRecy
     }
 
     public ArrayList<Workout> resetWorkouts(ArrayList<Workout> worko) {
-        ArrayList<Workout> w = (ArrayList<Workout>) worko.clone();
+        ArrayList<Workout> w = new ArrayList<>(worko);
 
         for (Workout s : w) {
             s.setColor("#000000");
@@ -94,7 +96,9 @@ public class ProfileRecyclerViewAdapter extends RecyclerView.Adapter<ProfileRecy
         holder.playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "PLAY" ,Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent((Activity) v.getContext(), StartWorkoutsActivity.class);
+                intent.putExtra("profile", p.getGroups());
+                v.getContext().startActivity(intent);
             }
         });
 
@@ -111,7 +115,7 @@ public class ProfileRecyclerViewAdapter extends RecyclerView.Adapter<ProfileRecy
                 title.setText("Edit Profile");
 
                 RecyclerView recyclerView = view.findViewById(R.id.editProfileRecyclerView);
-                RecyclerView colorsRecyclerView = view.findViewById(R.id.editProfileColorsRecyclerView);
+                RecyclerView colorsRecyclerView = view.findViewById(R.id.editProfileColorsRecView);
 
                 ColorsAdapter colorsAdapter = new ColorsAdapter();
                 GroupWorkoutsAdapter groupWorkoutsAdapter = new GroupWorkoutsAdapter();
