@@ -78,10 +78,10 @@ public class OrderGroupsFragment extends DialogFragment {
 
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT) {
 
-            private WorkoutGroupRecyclerViewAdapter mAdapter;
+
             private Drawable icon = getContext().getDrawable(R.drawable.ic_edit);
             private  ColorDrawable background = new ColorDrawable(Color.BLACK);
-            private boolean drawn = false;
+
             //swap two workouts with each other
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder dragged, @NonNull RecyclerView.ViewHolder target) {
@@ -172,10 +172,6 @@ public class OrderGroupsFragment extends DialogFragment {
                 fragment.setArguments(bundle);
                 fragment.setAdapter(wgAdapter);
                 fragment.show(getParentFragmentManager(), OrderIndividualGroupFragment.TAG);
-
-
-
-
 
             }
         });

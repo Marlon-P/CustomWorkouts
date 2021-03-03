@@ -18,7 +18,7 @@ import com.example.customworkouts.adapters.ProfileRecyclerViewAdapter;
 
 public class ProfileFragment extends Fragment {
 
-    //TODO add edit button to profile and delete button
+
     private Context context = getContext();
     private ProfileRecyclerViewAdapter profileAdapter = new ProfileRecyclerViewAdapter();
     private Utils profileUtils;

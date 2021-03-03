@@ -3,7 +3,10 @@ package com.example.customworkouts.fragments;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,6 +27,7 @@ import com.example.customworkouts.Workout;
 import com.example.customworkouts.WorkoutGroup;
 import com.example.customworkouts.adapters.ColorsAdapter;
 import com.example.customworkouts.adapters.GroupWorkoutsAdapter;
+import com.example.customworkouts.adapters.WorkoutGroupRecyclerViewAdapter;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -86,6 +91,7 @@ public class GroupWorkoutsFragment extends DialogFragment {
 
         workoutGroupRecView.setAdapter(groupWorkoutsAdapter);
         workoutGroupRecView.setLayoutManager(linearLayoutManager);
+
 
         builder.setView(view);
         builder.setCustomTitle(titleView);

@@ -5,6 +5,10 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -104,7 +108,7 @@ public class ProfileRecyclerViewAdapter extends RecyclerView.Adapter<ProfileRecy
                 View view = inflater.inflate(R.layout.edit_workout_profile, null);
                 View titleView = inflater.inflate(R.layout.dialog_title, null);
                 TextView title = titleView.findViewById(R.id.dialog_title);
-                title.setText("Order Workouts");
+                title.setText("Edit Profile");
 
                 RecyclerView recyclerView = view.findViewById(R.id.editProfileRecyclerView);
                 RecyclerView colorsRecyclerView = view.findViewById(R.id.editProfileColorsRecyclerView);
@@ -125,6 +129,102 @@ public class ProfileRecyclerViewAdapter extends RecyclerView.Adapter<ProfileRecy
                 builder.setCustomTitle(titleView);
                 builder.setView(view);
 
+                //swipe to delete feature
+                ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+
+
+                    private Drawable icon = context.getDrawable(R.drawable.ic_delete);
+                    private ColorDrawable background = new ColorDrawable(Color.RED);
+
+                    @Override
+                    public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder dragged, @NonNull RecyclerView.ViewHolder target) {
+                        return true;
+                    }
+
+
+                    @Override
+                    public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                        super.onChildDraw(c, recyclerView, viewHolder, dX,
+                                dY, actionState, isCurrentlyActive);
+                        View itemView = viewHolder.itemView;
+                        int backgroundCornerOffset = 10;
+
+                        if (dX > 0) { // Swiping to the right
+                            background.setBounds(itemView.getLeft(), itemView.getTop(),
+                                    itemView.getLeft() + ((int) dX) + backgroundCornerOffset,
+                                    itemView.getBottom());
+
+                        } else if (dX < 0) { // Swiping to the left
+                            background.setBounds(itemView.getRight() + ((int) dX) - backgroundCornerOffset,
+                                    itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                        } else { // view is unSwiped
+                            background.setBounds(0, 0, 0, 0);
+                        }
+                        background.draw(c);
+
+                        int iconMargin = (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
+                        int iconTop = itemView.getTop() + (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
+                        int iconBottom = iconTop + icon.getIntrinsicHeight();
+
+                        if (dX > 0) { // Swiping to the right
+                            int iconLeft = itemView.getLeft() + iconMargin + icon.getIntrinsicWidth();
+                            int iconRight = itemView.getLeft() + iconMargin;
+                            icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
+
+                            background.setBounds(itemView.getLeft(), itemView.getTop(),
+                                    itemView.getLeft() + ((int) dX) + backgroundCornerOffset,
+                                    itemView.getBottom());
+                        } else if (dX < 0) { // Swiping to the left
+                            int iconLeft = itemView.getRight() - icon.getIntrinsicWidth();
+                            int iconRight = itemView.getRight() - 5;
+                            icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
+
+                            background.setBounds(itemView.getRight() + ((int) dX) - backgroundCornerOffset,
+                                    itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                        } else { // view is unSwiped
+                            background.setBounds(0, 0, 0, 0);
+                        }
+                        background.draw(c);
+                        if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE   ) {
+
+
+                            icon.draw(c);
+                        }
+                    }
+
+
+                    @Override
+                    public float getSwipeThreshold(@NonNull RecyclerView.ViewHolder viewHolder) {
+                        return 0f;
+                    }
+
+                    @Override
+                    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                        int position = viewHolder.getAdapterPosition();
+                        groupWorkoutsAdapter.notifyItemChanged(position);
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder((Activity) context, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
+                        builder.setMessage("Are you sure you want to delete this workout?");
+                        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                groupWorkoutsAdapter.getWorkouts().remove(position);
+                                groupWorkoutsAdapter.notifyDataSetChanged();
+                            }
+                        });
+                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+
+                        builder.create();
+                        builder.show();
+                    }
+                });
+
+                helper.attachToRecyclerView(recyclerView);
 
 
                 EditText currProfileName = view.findViewById(R.id.editProfileName);
