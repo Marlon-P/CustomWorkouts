@@ -13,11 +13,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import java.util.ArrayList;
-import java.util.ListIterator;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class StartWorkoutsActivity extends AppCompatActivity {
+
+
+    public int currentWorkoutGroupPos = 0;
+    public int currentWorkoutPos = 0;
+    public ArrayList<WorkoutGroup> groups;
+    public ArrayList<Workout> currentWorkoutsList;
+    public WorkoutGroup currentWorkoutGroup;
+    public Workout currentWorkout;
+
+    ConstraintLayout constraintLayout;
+    TextView countDown;
+    TextView workoutTitle;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,9 +43,11 @@ public class StartWorkoutsActivity extends AppCompatActivity {
             }
         });
 
-        ConstraintLayout constraintLayout = findViewById(R.id.startWorkoutsBG);
-        TextView countDown = findViewById(R.id.startWorkoutsTxtView);
-        TextView workoutTitle = findViewById(R.id.startWorkoutTitle);
+
+        constraintLayout = findViewById(R.id.startWorkoutsBG);
+        countDown = findViewById(R.id.startWorkoutsTxtView);
+        workoutTitle = findViewById(R.id.startWorkoutTitle);
+
 
         new CountDownTimer(6000, 1000) {
 
@@ -48,86 +61,31 @@ public class StartWorkoutsActivity extends AppCompatActivity {
 
                 Intent intent = getIntent();
                 ArrayList<WorkoutGroup> wgs = intent.getParcelableArrayListExtra("profile");
-                ArrayList<WorkoutGroup> copy = new ArrayList<>(wgs);
+                groups = new ArrayList<>(wgs);
 
 
-                WorkoutGroup wg = copy.get(0);
+                currentWorkoutGroup = groups.get(currentWorkoutGroupPos);
 
-                ArrayList<Workout> w = wg.getWorkouts();
-                while (!w.isEmpty()) {
+                currentWorkoutsList = currentWorkoutGroup.getWorkouts();
 
-                    for (int i = 0; i < w.size(); i++) {
 
-                        Workout workout = w.get(i);
-                        constraintLayout.setBackgroundColor(Color.parseColor("#00FF00"));
-                        workoutTitle.setVisibility(View.VISIBLE);
-                        workoutTitle.setText(workout.getExerciseName());
-
-                        workout.setSets(workout.getSets() - 1);
-                        long duration = getMilli(workout.getWorkoutDurationMinutes(), workout.getWorkoutDurationSeconds());
-                        long restTime = getMilli(workout.getMinutes(), workout.getSeconds());
-
-                        countDown.setTextColor(Color.parseColor("#FFFFFF"));
-                        new CountDownTimer(duration, 1000) {
-
-                            /**
-                             * Callback fired on regular interval.
-                             *
-                             * @param millisUntilFinished The amount of time until finished.
-                             */
-                            @Override
-                            public void onTick(long millisUntilFinished) {
-
-                                 String ms = String.format(
-                                        Locale.US, "%02d:%02d",
-                                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
-                                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished));
-                                 countDown.setText(ms);
-                            }
-
-                            /**
-                             * Callback fired when the time is up.
-                             */
-                            @Override
-                            public void onFinish() {
-                                constraintLayout.setBackgroundColor(Color.parseColor("#FF0000"));
-                                workoutTitle.setText("REST TIME");
-                                new CountDownTimer(restTime, 1000) {
-
-                                    /**
-                                     * Callback fired on regular interval.
-                                     *
-                                     * @param millisUntilFinished The amount of time until finished.
-                                     */
-                                    @Override
-                                    public void onTick(long millisUntilFinished) {
-                                        String ms = String.format(
-                                                Locale.US, "%02d:%02d",
-                                                TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
-                                                TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished));
-                                        countDown.setText(ms);
-                                    }
-
-                                    /**
-                                     * Callback fired when the time is up.
-                                     */
-                                    @Override
-                                    public void onFinish() {
-
-                                    }
-                                }.start();
-                            }
-                        }.start();
+                currentWorkout =  currentWorkoutsList.get(currentWorkoutPos);
+                System.out.println(currentWorkout.getExerciseName());
+                constraintLayout.setBackgroundColor(Color.parseColor("#00FF00"));
+                workoutTitle.setVisibility(View.VISIBLE);
+                workoutTitle.setText(currentWorkout.getExerciseName());
 
 
 
-                        if (workout.getSets() <= 0) {
-                            w.remove(workout);
-                        }
-                    }
 
-                }
+                long duration = getMilli( currentWorkout.getWorkoutDurationMinutes(),  currentWorkout.getWorkoutDurationSeconds());
 
+
+                countDown.setTextColor(Color.parseColor("#FFFFFF"));
+
+                CountDownTimer start = startTimer(duration);
+
+                start.start();
             }
 
         }.start();
@@ -136,13 +94,92 @@ public class StartWorkoutsActivity extends AppCompatActivity {
     }
 
     private long getMilli(int mins, int secs) {
-
-
         mins *= 60;
-        mins += secs;
+        mins += secs + 1; //timer takes 1 second to load so + 1 to get back to OG time
         mins *= 1000;
 
-        return (long) mins;
+        return 3000;
     }
+
+    public CountDownTimer restTimer(long restTime) {
+        return new CountDownTimer(restTime,1000) {
+            @Override
+            public void onTick(long millis) {
+
+                String ms = String.format(Locale.US,"%02d:%02d",
+                        TimeUnit.MILLISECONDS.toMinutes(millis),
+                        TimeUnit.MILLISECONDS.toSeconds(millis) -
+                                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))
+                );
+                countDown.setText(ms);
+            }
+
+            @Override
+            public void onFinish() {
+                if (currentWorkoutGroupPos >= groups.size()) {
+                    System.out.println("Workout Done");
+                    return;
+                }
+
+                constraintLayout.setBackgroundColor(Color.parseColor("#00FF00"));
+                currentWorkout = currentWorkoutGroup.getWorkout(currentWorkoutPos);
+                workoutTitle.setText(currentWorkout.getExerciseName());
+
+                int mins = currentWorkout.getWorkoutDurationMinutes();
+                int sec = currentWorkout.getWorkoutDurationSeconds();
+
+                long duration = getMilli(mins, sec);
+
+                startTimer(duration).start();
+
+            }
+        };
+    }
+
+    private CountDownTimer startTimer(long duration) {
+    return  new CountDownTimer(duration, 1000) {
+
+
+
+            @Override
+            public void onTick(long millis) {
+
+
+                String ms = String.format(Locale.US,"%02d:%02d",
+                        TimeUnit.MILLISECONDS.toMinutes(millis),
+                        TimeUnit.MILLISECONDS.toSeconds(millis) -
+                                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))
+                );
+                countDown.setText(ms);
+
+            }
+
+
+            @Override
+            public void onFinish() {
+                constraintLayout.setBackgroundColor(Color.parseColor("#FF0000"));
+                workoutTitle.setText("REST TIME");
+
+                int mins =  currentWorkout.getMinutes();
+                int sec = currentWorkout.getSeconds();
+
+                long restTime = getMilli(mins, sec);
+                restTimer(restTime).start();
+                currentWorkoutPos++; // prepare to go to the next workout
+                if (currentWorkoutPos >= currentWorkoutGroup.getWorkouts().size()) {
+                    currentWorkoutPos = 0;
+                    currentWorkoutGroupPos++;
+                    //currentWorkoutGroup = groups.get(currentWorkoutGroupPos);
+                }
+
+            }
+        };
+
+
+    }
+
+
+
+
 
 }
