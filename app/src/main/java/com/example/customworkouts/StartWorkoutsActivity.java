@@ -49,7 +49,7 @@ public class StartWorkoutsActivity extends AppCompatActivity {
         workoutTitle = findViewById(R.id.startWorkoutTitle);
 
 
-        new CountDownTimer(6000, 1000) {
+        new CountDownTimer(6000, 100) {
 
             public void onTick(long millisUntilFinished) {
                 long seconds = millisUntilFinished /1000;
@@ -102,7 +102,7 @@ public class StartWorkoutsActivity extends AppCompatActivity {
     }
 
     public CountDownTimer restTimer(long restTime) {
-        return new CountDownTimer(restTime,1000) {
+        return new CountDownTimer(restTime,100) {
             @Override
             public void onTick(long millis) {
 
@@ -116,9 +116,14 @@ public class StartWorkoutsActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
+
                 if (currentWorkoutGroupPos >= groups.size()) {
-                    System.out.println("Workout Done");
+                    constraintLayout.setBackgroundColor(Color.parseColor("#0000FF"));
+                    workoutTitle.setText("Good Job ");
+                    countDown.setText("Workout Done!");
                     return;
+                } else {
+                    currentWorkoutGroup = groups.get(currentWorkoutGroupPos);
                 }
 
                 constraintLayout.setBackgroundColor(Color.parseColor("#00FF00"));
@@ -137,7 +142,7 @@ public class StartWorkoutsActivity extends AppCompatActivity {
     }
 
     private CountDownTimer startTimer(long duration) {
-    return  new CountDownTimer(duration, 1000) {
+    return  new CountDownTimer(duration, 100) {
 
 
 
@@ -150,6 +155,7 @@ public class StartWorkoutsActivity extends AppCompatActivity {
                         TimeUnit.MILLISECONDS.toSeconds(millis) -
                                 TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))
                 );
+
                 countDown.setText(ms);
 
             }
@@ -157,6 +163,7 @@ public class StartWorkoutsActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
+                currentWorkout.setSets(currentWorkout.getSets() - 1);
                 constraintLayout.setBackgroundColor(Color.parseColor("#FF0000"));
                 workoutTitle.setText("REST TIME");
 
@@ -166,10 +173,26 @@ public class StartWorkoutsActivity extends AppCompatActivity {
                 long restTime = getMilli(mins, sec);
                 restTimer(restTime).start();
                 currentWorkoutPos++; // prepare to go to the next workout
-                if (currentWorkoutPos >= currentWorkoutGroup.getWorkouts().size()) {
-                    currentWorkoutPos = 0;
-                    currentWorkoutGroupPos++;
-                    //currentWorkoutGroup = groups.get(currentWorkoutGroupPos);
+
+                if (currentWorkout.getSets() <= 0) {//to know when all sets are complete, decrement sets, if a workout reaches 0 rmeove it
+                    currentWorkoutPos--;
+                    System.out.println("REMOVING");
+                    currentWorkoutGroup.remove(currentWorkout);
+
+                    if (!currentWorkoutGroup.getWorkouts().isEmpty()) {
+                        currentWorkout = currentWorkoutGroup.getWorkout(currentWorkoutPos);
+                    }
+                }
+
+                if (currentWorkoutPos >= currentWorkoutGroup.getWorkouts().size() ) {
+                    if (currentWorkoutGroup.getWorkouts().isEmpty()) {
+                        currentWorkoutPos = 0;
+                        currentWorkoutGroupPos++;
+
+                    } else {
+                        currentWorkoutPos = 0;
+
+                    }
                 }
 
             }

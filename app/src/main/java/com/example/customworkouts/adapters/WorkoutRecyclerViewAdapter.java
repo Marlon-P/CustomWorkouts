@@ -139,8 +139,9 @@ public class WorkoutRecyclerViewAdapter extends RecyclerView.Adapter<WorkoutRecy
 
                                 utils.editWorkout(position, name, setNumber, reps, mins, secs, durMin, durSec);
                                 setWorkouts(utils.getWorkoutsList());
-                                holder.edit_delete_option_menu.setVisibility(View.GONE);
-                                MainActivity.fgm.beginTransaction().replace(R.id.fragmentContainer, new HomeFragment()).commit();
+
+                                notifyItemChanged(position);
+
                             }
                         });
                         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
