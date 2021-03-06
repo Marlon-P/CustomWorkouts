@@ -59,7 +59,7 @@ public class GroupWorkoutsFragment extends DialogFragment {
     public void onResume() {
         super.onResume();
         getDialog().getWindow().setLayout(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 
@@ -77,7 +77,7 @@ public class GroupWorkoutsFragment extends DialogFragment {
         RecyclerView colorsRecView = view.findViewById(R.id.colorsRecyclerView);
         RecyclerView workoutGroupRecView = view.findViewById(R.id.groupWorkoutsRecyclerView);
 
-        //TODO Add scroll bar to color recycler view
+
         ColorsAdapter colorsAdapter = new ColorsAdapter();
         GroupWorkoutsAdapter groupWorkoutsAdapter = new GroupWorkoutsAdapter();
         groupWorkoutsAdapter.setWorkouts(workouts);

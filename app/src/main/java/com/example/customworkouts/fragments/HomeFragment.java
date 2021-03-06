@@ -76,6 +76,9 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
+    public void setWorkouts() {
+        adapter.setWorkouts(Utils.getInstance(context).getWorkoutsList());
+    }
 
 
 }

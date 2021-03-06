@@ -25,8 +25,6 @@ public class Utils {
     private SharedPreferences.Editor profilesEditor;
     private static ArrayList<Workout> workoutArrayList; //copy of workouts list in storage
     private static WorkoutRecyclerViewAdapter workoutRecyclerViewAdapter;
-    private static ProfileRecyclerViewAdapter profileRecyclerViewAdapter;
-    private static CardProfileRecyclerViewAdapter cardProfileRecyclerViewAdapter;
     private static Gson gson;
 
 
@@ -61,25 +59,9 @@ public class Utils {
         return instance;
     }
 
-    public static Utils getInstance(Context context, ProfileRecyclerViewAdapter adapter) {
-        if (instance == null) {
-            instance = new Utils(context);
-            Utils.profileRecyclerViewAdapter = adapter;
-        }
 
-        workoutArrayList = getWorkouts();
-        return instance;
-    }
 
-    public static Utils getInstance(Context context, CardProfileRecyclerViewAdapter adapter) {
-        if (instance == null) {
-            instance = new Utils(context);
-            Utils.cardProfileRecyclerViewAdapter = adapter;
-        }
 
-        workoutArrayList = getWorkouts();
-        return instance;
-    }
 
 
 

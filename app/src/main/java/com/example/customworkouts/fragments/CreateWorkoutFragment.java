@@ -59,10 +59,24 @@ public class CreateWorkoutFragment extends DialogFragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        Dialog dialog = getDialog();
+        if (dialog != null) {
+            int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.8f);
+            int height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            if (null != dialog.getWindow()) {
+                dialog.getWindow().setLayout(width, height);
+            }
+        }
+    }
+
+
+    @Override
     public void onResume() {
         super.onResume();
         getDialog().getWindow().setLayout(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 

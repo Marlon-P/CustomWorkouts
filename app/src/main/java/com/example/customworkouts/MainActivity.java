@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
     private ProfileFragment profileFragment;
     private String currentFragment = "HOME";
     public static FragmentManager fgm;
-    boolean populated = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +61,8 @@ public class MainActivity extends AppCompatActivity {
                     fgm.beginTransaction().replace(R.id.fragmentContainer, homeFragment,"HOME").commit();
                 } else {
                         Utils.getInstance(MainActivity.this).populate();
-                        fgm.beginTransaction().replace(R.id.fragmentContainer, new HomeFragment(),"HOME").commit();
+                        homeFragment.setWorkouts();
+
                 }
 
                 return true;

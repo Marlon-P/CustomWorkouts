@@ -30,7 +30,7 @@ public class ProfileFragment extends Fragment {
 
         View profilesPageView = inflater.inflate(R.layout.profile_container_fragment, container, false);
 
-        profileUtils = Utils.getInstance(context, profileAdapter);
+        profileUtils = Utils.getInstance(context);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         RecyclerView profilesRecyclerView = profilesPageView.findViewById(R.id.profilesRecyclerView);

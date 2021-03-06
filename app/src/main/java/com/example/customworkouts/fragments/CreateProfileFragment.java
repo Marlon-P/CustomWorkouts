@@ -43,11 +43,13 @@ public class CreateProfileFragment extends DialogFragment {
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
+
+
     @Override
     public void onResume() {
         super.onResume();
         getDialog().getWindow().setLayout(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 

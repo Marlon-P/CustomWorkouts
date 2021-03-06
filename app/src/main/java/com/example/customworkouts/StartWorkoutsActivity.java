@@ -93,7 +93,7 @@ public class StartWorkoutsActivity extends AppCompatActivity {
             @Override
             public void onInit(int status) {
                 if(status != TextToSpeech.ERROR) {
-                    tts.setLanguage(Locale.UK);
+                    tts.setLanguage(Locale.US);
                 }
             }
         });
@@ -123,7 +123,7 @@ public class StartWorkoutsActivity extends AppCompatActivity {
                 AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
                 audioManager.setStreamVolume(AudioManager.STREAM_DTMF, audioManager.getStreamMaxVolume(AudioManager.STREAM_DTMF), AudioManager.FLAG_PLAY_SOUND);
 
-                ToneGenerator tone = new ToneGenerator(AudioManager.STREAM_DTMF, 50); // 100 is max volume
+                ToneGenerator tone = new ToneGenerator(AudioManager.STREAM_DTMF, 100); // 100 is max volume
                 tone.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 250); // 500ms
 
             }
@@ -199,7 +199,7 @@ public class StartWorkoutsActivity extends AppCompatActivity {
                 AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
                 audioManager.setStreamVolume(AudioManager.STREAM_DTMF, audioManager.getStreamMaxVolume(AudioManager.STREAM_DTMF), AudioManager.FLAG_PLAY_SOUND);
 
-                ToneGenerator tone = new ToneGenerator(AudioManager.STREAM_DTMF, 50); // 100 is max volume
+                ToneGenerator tone = new ToneGenerator(AudioManager.STREAM_DTMF, 100); // 100 is max volume
                 tone.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 250); // 500ms
 
             }

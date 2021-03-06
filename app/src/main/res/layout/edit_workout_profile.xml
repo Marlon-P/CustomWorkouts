@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black">
+    android:background="@color/black"
+    android:layout_gravity="center">
 
     <TextView
         android:id="@+id/editProfileNameText"
@@ -39,18 +40,21 @@
         android:id="@+id/editProfileColorsRecView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        android:scrollbarFadeDuration="0"
         app:layout_constraintTop_toBottomOf="@id/editProfileNameText">
 
     </androidx.recyclerview.widget.RecyclerView>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/editProfileRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="62dp"
+        android:layout_marginBottom="56dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editProfileColorsRecView"
-        tools:layout_editor_absoluteY="37dp"></androidx.recyclerview.widget.RecyclerView>
+        tools:layout_editor_absoluteY="37dp" />
 
 
 
