@@ -32,6 +32,7 @@ import com.example.customworkouts.adapters.WorkoutGroupRecyclerViewAdapter;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class GroupWorkoutsFragment extends DialogFragment {
 
@@ -58,7 +59,7 @@ public class GroupWorkoutsFragment extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-        getDialog().getWindow().setLayout(
+        Objects.requireNonNull(getDialog()).getWindow().setLayout(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
     }
@@ -68,7 +69,7 @@ public class GroupWorkoutsFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_DEVICE_DEFAULT_DARK);
         AlertDialog dialog;
-        LayoutInflater inflater = getActivity().getLayoutInflater();
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.group_workouts_layout, null);
         View titleView = inflater.inflate(R.layout.dialog_title, null);
         TextView title = titleView.findViewById(R.id.dialog_title);

@@ -15,14 +15,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.customworkouts.R;
-import com.example.customworkouts.Utils;
+import com.example.customworkouts.Data;
 import com.example.customworkouts.adapters.WorkoutRecyclerViewAdapter;
 
 public class HomeFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private WorkoutRecyclerViewAdapter adapter = new WorkoutRecyclerViewAdapter();
-    private Utils utils;
+    private Data Data;
     private Context context = getActivity();
 
     @Override
@@ -46,7 +46,7 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
 
 
-        utils = Utils.getInstance(recyclerView.getContext(), adapter);
+        Data = Data.getInstance(recyclerView.getContext(), adapter);
 
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
             //swap two workouts with each other
@@ -55,7 +55,7 @@ public class HomeFragment extends Fragment {
                 int d_pos = dragged.getAdapterPosition();
                 int t_pos = target.getAdapterPosition();
 
-                utils.swap(d_pos, t_pos);
+                Data.swap(d_pos, t_pos);
                 return true;
             }
 
@@ -72,12 +72,12 @@ public class HomeFragment extends Fragment {
         recyclerView.addItemDecoration(dividerItemDecoration);
 
 
-        adapter.setWorkouts(Utils.getInstance(context).getWorkoutsList());
+        adapter.setWorkouts(Data.getInstance(context).getWorkoutsList());
         return view;
     }
 
     public void setWorkouts() {
-        adapter.setWorkouts(Utils.getInstance(context).getWorkoutsList());
+        adapter.setWorkouts(Data.getInstance(context).getWorkoutsList());
     }
 
 

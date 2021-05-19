@@ -29,7 +29,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.customworkouts.MainActivity;
 import com.example.customworkouts.Profile;
 import com.example.customworkouts.R;
-import com.example.customworkouts.Utils;
+import com.example.customworkouts.Data;
 import com.example.customworkouts.Workout;
 import com.example.customworkouts.WorkoutGroup;
 import com.example.customworkouts.adapters.OrderGroupsAdapter;
@@ -189,7 +189,7 @@ public class OrderGroupsFragment extends DialogFragment {
                 public void onClick(DialogInterface dialog, int which) {
 
                     Profile p = new Profile(newName, adapter.getGroups());
-                    Utils.getInstance(getContext()).updateProfile(profileName, newName, p);
+                    Data.getInstance(getContext()).updateProfile(profileName, newName, p);
                     MainActivity.dismissAllDialogs(getParentFragmentManager());
                     MainActivity.fgm.beginTransaction().replace(R.id.fragmentContainer, new ProfileFragment(), "PROFILE").commit();
                 }
@@ -199,7 +199,7 @@ public class OrderGroupsFragment extends DialogFragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
-                    Utils.getInstance(getContext()).createProfile(profileName, adapter.getGroups());
+                    Data.getInstance(getContext()).createProfile(profileName, adapter.getGroups());
                     MainActivity.dismissAllDialogs(getParentFragmentManager());
                     MainActivity.fgm.beginTransaction().replace(R.id.fragmentContainer, new ProfileFragment(), "PROFILE").commit();
                 }

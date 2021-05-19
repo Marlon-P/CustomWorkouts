@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 
 public class StartWorkoutsActivity extends AppCompatActivity {
 
-
+    //TODO fix when the phone rotates while pressing play or lock the phone in portrait mode
     int currentWorkoutGroupPos = 0;
     int currentWorkoutPos = 0;
     ArrayList<WorkoutGroup> groups;

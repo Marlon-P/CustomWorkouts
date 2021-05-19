@@ -23,7 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.customworkouts.MainActivity;
 import com.example.customworkouts.R;
-import com.example.customworkouts.Utils;
+import com.example.customworkouts.Data;
 import com.example.customworkouts.Workout;
 import com.example.customworkouts.adapters.CreateProfileRecyclerViewAdapter;
 import com.google.gson.internal.$Gson$Preconditions;
@@ -35,7 +35,7 @@ import java.util.HashSet;
 public class CreateProfileFragment extends DialogFragment {
 
 
-    public static String TAG = "CREATE_PROFILE_FRAGMEN";
+    public static String TAG = "CREATE_PROFILE_FRAGMENT";
 
     @Nullable
     @Override
@@ -76,7 +76,7 @@ public class CreateProfileFragment extends DialogFragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         CreateProfileRecyclerViewAdapter adapter = new CreateProfileRecyclerViewAdapter();
-        adapter.setWorkouts(Utils.getInstance(getContext()).getWorkoutsList());
+        adapter.setWorkouts(Data.getInstance(getContext()).getWorkoutsList());
         recyclerView.setAdapter(adapter);
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),

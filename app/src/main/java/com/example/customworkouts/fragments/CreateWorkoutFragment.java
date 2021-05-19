@@ -22,7 +22,7 @@ import androidx.annotation.RequiresApi;
 
 import com.example.customworkouts.MainActivity;
 import com.example.customworkouts.R;
-import com.example.customworkouts.Utils;
+import com.example.customworkouts.Data;
 import com.example.customworkouts.Workout;
 import com.example.customworkouts.fragments.HomeFragment;
 
@@ -121,7 +121,7 @@ public class CreateWorkoutFragment extends DialogFragment {
                     if (workouts.isEmpty()) {
                         Toast.makeText(context, "No Workouts Added", Toast.LENGTH_LONG).show();
                     } else {
-                        Utils.getInstance(context).addWorkouts(workouts);
+                        Data.getInstance(context).addWorkouts(workouts);
                         if (workouts.size() > 1) {
                             Toast.makeText(context, "Added " + workouts.size() + " workouts to your list", Toast.LENGTH_SHORT).show();
                         } else {
@@ -240,7 +240,7 @@ public class CreateWorkoutFragment extends DialogFragment {
                         int durMins = Integer.parseInt(durationMinEditText);
                         int durSecs = Integer.parseInt(durationSecondsEditText);
 
-                        Utils.getInstance(context).addWorkout(new Workout(name, setNumber, reps, mins, secs, durMins, durSecs));
+                        Data.getInstance(context).addWorkout(new Workout(name, setNumber, reps, mins, secs, durMins, durSecs));
                         MainActivity.fgm.beginTransaction().replace(R.id.fragmentContainer, new HomeFragment()).commit();
                         Toast.makeText(context, "Add " + name + " to your workouts list", Toast.LENGTH_SHORT).show();
 

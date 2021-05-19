@@ -35,7 +35,7 @@ import com.example.customworkouts.Profile;
 import com.example.customworkouts.R;
 import com.example.customworkouts.StartWorkoutsActivity;
 import com.example.customworkouts.SwipeToDeleteCallBack;
-import com.example.customworkouts.Utils;
+import com.example.customworkouts.Data;
 import com.example.customworkouts.Workout;
 import com.example.customworkouts.WorkoutGroup;
 import com.example.customworkouts.fragments.EditProfileFragment;
@@ -49,14 +49,14 @@ import java.util.ArrayList;
 public class ProfileRecyclerViewAdapter extends RecyclerView.Adapter<ProfileRecyclerViewAdapter.ViewHolder> {
 
     private ArrayList<Profile> workoutSet;
-    private Utils profileUtils;
+    private Data profileData;
 
     public void setWorkouts( ArrayList<Profile> workouts) {
         this.workoutSet = workouts;
     }
 
-    public void setProfileUtils(Utils profileUtils) {
-        this.profileUtils = profileUtils;
+    public void setProfileData(Data profileData) {
+        this.profileData = profileData;
     }
 
     public ArrayList<Workout> resetWorkouts(ArrayList<Workout> worko) {
@@ -121,7 +121,7 @@ public class ProfileRecyclerViewAdapter extends RecyclerView.Adapter<ProfileRecy
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (Utils.getInstance(v.getContext()).deleteProfile(profileName)) {
+                        if (Data.getInstance(v.getContext()).deleteProfile(profileName)) {
                             MainActivity.fgm.beginTransaction().replace(R.id.fragmentContainer, new ProfileFragment()).commit();
                             Toast.makeText(v.getContext(), "Deleted " + profileName ,Toast.LENGTH_SHORT).show();
                         }

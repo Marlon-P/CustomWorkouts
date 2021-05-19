@@ -15,10 +15,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 
-public class Utils {
+public class Data {
 
     private static final String WORKOUTS_KEY = "workouts";
-    private static Utils instance;
+    private static Data instance;
     private static SharedPreferences sharedPreferences;
     private static SharedPreferences profiles;
     private SharedPreferences.Editor allWorkoutsEditor;
@@ -28,7 +28,7 @@ public class Utils {
     private static Gson gson;
 
 
-    private Utils(Context context) {
+    private Data(Context context) {
         sharedPreferences = context.getSharedPreferences("WorkoutDb", Context.MODE_PRIVATE);
         profiles = context.getSharedPreferences("ProfilesDb", Context.MODE_PRIVATE);
         gson = new Gson();
@@ -40,19 +40,19 @@ public class Utils {
     }
 
 
-    public static Utils getInstance(Context context) {
+    public static Data getInstance(Context context) {
         if (instance == null) {
-            instance = new Utils(context);
+            instance = new Data(context);
 
         }
         workoutArrayList = getWorkouts();
         return instance;
     }
 
-    public static Utils getInstance(Context context, WorkoutRecyclerViewAdapter adapter) {
+    public static Data getInstance(Context context, WorkoutRecyclerViewAdapter adapter) {
         if (instance == null) {
-            instance = new Utils(context);
-            Utils.workoutRecyclerViewAdapter = adapter;
+            instance = new Data(context);
+            Data.workoutRecyclerViewAdapter = adapter;
         }
 
         workoutArrayList = getWorkouts();
@@ -72,7 +72,7 @@ public class Utils {
         allWorkoutsEditor = sharedPreferences.edit();
         Gson gson = new Gson();
         allWorkoutsEditor.putString(WORKOUTS_KEY, gson.toJson(workoutArrayList));
-        allWorkoutsEditor.apply(); //commit occurs immediately, apply() works in the background
+        allWorkoutsEditor.apply(); //commit() occurs immediately, apply() works in the background
 
     }
 

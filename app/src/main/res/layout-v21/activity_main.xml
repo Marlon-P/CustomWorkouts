@@ -69,10 +69,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_add"
-
-        app:layout_anchor="@id/bottomAppBar"
-        android:backgroundTint="@color/teal_200"
-        app:fabCustomSize="60dp">
+        app:rippleColor="@null"
+        android:backgroundTint="@color/transparent"
+        app:fabSize="mini"
+        app:borderWidth="0dp"
+        app:layout_anchor="@id/bottomAppBar">
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

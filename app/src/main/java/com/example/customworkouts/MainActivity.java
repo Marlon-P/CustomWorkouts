@@ -30,6 +30,12 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
 
+    //TODO replace click to edit with swipe to delete
+    //TODO make tts of exercise name play immediately after the timer runs out
+    //TODO make timers work with orientation changes
+    //TODO fix issue of edit workout dialog being cropped
+
+
     private FloatingActionButton menuOpenFAB;
     private BottomNavigationView bottomNavView;
     private HomeFragment homeFragment;
@@ -60,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
                     currentFragment = "HOME";
                     fgm.beginTransaction().replace(R.id.fragmentContainer, homeFragment,"HOME").commit();
                 } else {
-                        Utils.getInstance(MainActivity.this).populate();
+                        Data.getInstance(MainActivity.this).populate();
                         homeFragment.setWorkouts();
 
                 }
@@ -158,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                if (Utils.getInstance(view.getContext()).deleteAllProfiles()) {
+                if (Data.getInstance(view.getContext()).deleteAllProfiles()) {
                     Toast.makeText(view.getContext(), "Deleted All Profiles", Toast.LENGTH_SHORT).show();
                     //refresh fragment to show deleted views
                     fgm.beginTransaction().replace(R.id.fragmentContainer, new ProfileFragment()).commit();
@@ -175,6 +181,8 @@ public class MainActivity extends AppCompatActivity {
         builder.create();
         builder.show();
     }
+
+    //deletes all workouts from the list of workouts in the homepage
     public void deleteAll(View view) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
@@ -183,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                if (Utils.getInstance(view.getContext()).deleteAll()) {
+                if (Data.getInstance(view.getContext()).deleteAll()) {
                     Toast.makeText(view.getContext(), "Deleted All Workouts", Toast.LENGTH_SHORT).show();
                     //refresh fragment to show deleted views
                    fgm.beginTransaction().replace(R.id.fragmentContainer, new HomeFragment()).commit();
@@ -207,9 +215,6 @@ public class MainActivity extends AppCompatActivity {
 
         List<Fragment> fragments = manager.getFragments();
 
-        if (fragments == null)
-            return;
-
         for (Fragment fragment : fragments) {
             if (fragment instanceof DialogFragment) {
                 DialogFragment dialogFragment = (DialogFragment) fragment;
@@ -217,8 +222,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             FragmentManager childFragmentManager = fragment.getChildFragmentManager();
-            if (childFragmentManager != null)
-                dismissAllDialogs(childFragmentManager);
+            dismissAllDialogs(childFragmentManager);
         }
     }
 

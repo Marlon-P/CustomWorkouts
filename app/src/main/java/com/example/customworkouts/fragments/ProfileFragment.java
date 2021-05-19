@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.customworkouts.R;
-import com.example.customworkouts.Utils;
+import com.example.customworkouts.Data;
 import com.example.customworkouts.adapters.ProfileRecyclerViewAdapter;
 
 public class ProfileFragment extends Fragment {
@@ -21,7 +21,7 @@ public class ProfileFragment extends Fragment {
 
     private Context context = getContext();
     private ProfileRecyclerViewAdapter profileAdapter = new ProfileRecyclerViewAdapter();
-    private Utils profileUtils;
+    private Data profileData;
 
     @Nullable
     @Override
@@ -30,14 +30,14 @@ public class ProfileFragment extends Fragment {
 
         View profilesPageView = inflater.inflate(R.layout.profile_container_fragment, container, false);
 
-        profileUtils = Utils.getInstance(context);
+        profileData = Data.getInstance(context);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         RecyclerView profilesRecyclerView = profilesPageView.findViewById(R.id.profilesRecyclerView);
 
         profilesRecyclerView.setLayoutManager(linearLayoutManager);
-        profileAdapter.setWorkouts(profileUtils.getProfiles());
-        profileAdapter.setProfileUtils(profileUtils);
+        profileAdapter.setWorkouts(profileData.getProfiles());
+        profileAdapter.setProfileData(profileData);
 
         profilesRecyclerView.setAdapter(profileAdapter);
 

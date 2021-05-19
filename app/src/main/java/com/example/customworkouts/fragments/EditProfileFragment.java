@@ -27,7 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.customworkouts.MainActivity;
 import com.example.customworkouts.R;
-import com.example.customworkouts.Utils;
+import com.example.customworkouts.Data;
 import com.example.customworkouts.Workout;
 import com.example.customworkouts.adapters.ColorsAdapter;
 import com.example.customworkouts.adapters.CreateProfileRecyclerViewAdapter;
@@ -242,7 +242,7 @@ public class EditProfileFragment extends DialogFragment {
                         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
                         recyclerView.setLayoutManager(linearLayoutManager);
                         CreateProfileRecyclerViewAdapter createAdapter = new CreateProfileRecyclerViewAdapter();
-                        createAdapter.setWorkouts(Utils.getInstance(context).getWorkoutsList());
+                        createAdapter.setWorkouts(Data.getInstance(context).getWorkoutsList());
                         recyclerView.setAdapter(createAdapter);
 
                         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
