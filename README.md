@@ -19,4 +19,3 @@
 <img  src="screenshots/custom_workouts_profile_added.jpg" width="19%" >
 
 
-## Demo
