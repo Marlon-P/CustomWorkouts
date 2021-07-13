@@ -17,5 +17,8 @@
 
 <div style="display:flex;" >
 <img  src="screenshots/custom_workouts_profile_added.jpg" width="19%" >
+<img style="margin-left:10px;" src="screenshots/custom_workouts_workout_timer.jpg" width="19%" >
+<img style="margin-left:10px;" src="screenshots/custom_workout_timer_rest.jpg" width="19%" >
+<img style="margin-left:10px;" src="screenshots/custom_workouts_workout_finished.jpg" width="19%" >
 
 
